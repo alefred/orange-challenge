@@ -8,7 +8,7 @@ WORKDIR /usr/src
 #RUN apt install maven
 RUN ./mvnw clean verify
 
-EXPOSE 8081
+EXPOSE 8080
 
-CMD ["java", "-jar","target/react-and-spring-data-rest-*.jar"]
+CMD ["java", "-jar","target/react-and-spring-data-rest-0.0.1-SNAPSHOT.jar"]
 #CMD ["npx", "nodemon", "index.js"]
