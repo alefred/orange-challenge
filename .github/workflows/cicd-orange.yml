@@ -36,6 +36,6 @@ jobs:
         java-version: '1.8.x'
     - uses: azure/webapps-deploy@v2
       with:
-        app-name: 'orangeApp01'
+        app-name: 'orangeFreeApp02'
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
         images: 'orangeacrfree01.azurecr.io/img-orangev2'
