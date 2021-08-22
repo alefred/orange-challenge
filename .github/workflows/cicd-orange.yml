@@ -32,6 +32,6 @@ jobs:
     steps:
     - uses: azure/webapps-deploy@v2
       with:
-        app-name: 'orangeFreeApp02'
+        app-name: 'orangeFreeApp04'
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
         images: 'orangeacrfree01.azurecr.io/img-orangev2'
