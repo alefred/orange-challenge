@@ -31,9 +31,6 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/setup-java@v1
-      with:
-        java-version: '1.8.x'
     - uses: azure/webapps-deploy@v2
       with:
         app-name: 'orangeFreeApp02'
