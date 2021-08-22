@@ -5,7 +5,7 @@ COPY [".", "/usr/src"]
 WORKDIR /usr/src
 
 #RUN apt update 
-#RUN apt install maven
+RUN chmod +x mvnw
 RUN ./mvnw clean verify
 
 EXPOSE 8080
