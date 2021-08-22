@@ -43,9 +43,9 @@ public class EventHandler {
 				MESSAGE_PREFIX + "/updateEmployee", getPath(employee));
 	}
 
-	/**
+	/** 
 	 * Take an {@link Employee} and get the URI using Spring Data REST's {@link EntityLinks}.
-	 *
+	 * TODO: Validate thi section
 	 * @param employee
 	 */
 	private String getPath(Employee employee) {
