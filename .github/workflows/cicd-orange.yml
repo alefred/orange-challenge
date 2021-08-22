@@ -28,6 +28,7 @@ jobs:
   deploy:
     name: deploy-orange
     needs: build
+    runs-on: ubuntu-latest
     steps:
     - uses: azure/webapps-deploy@v2
       with:
