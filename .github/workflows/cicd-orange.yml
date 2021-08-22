@@ -12,4 +12,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      with:
+        login-server: orangeacrfree01.azurecr.io
+        username: orangeAcrFree01
+        password: AWtIUO2fbWSxgL9Rr00LiP+ILTgeOpJz
+      run: |
+        docker build . -t mycontainer.azurecr.io/myapp:${{ github.sha }}
+        docker push mycontainer.azurecr.io/myapp:${{ github.sha }}   
