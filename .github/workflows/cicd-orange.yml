@@ -16,4 +16,3 @@ jobs:
         script:  |
           ls
           pwd
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
