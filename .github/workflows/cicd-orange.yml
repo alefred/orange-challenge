@@ -24,7 +24,6 @@ jobs:
     - run: |
         docker build -t orangeacrfree01.azurecr.io/img-orangev2  .
         docker push orangeacrfree01.azurecr.io/img-orangev2   
-        docker image ls
   
   deploy:
     name: deploy-orange
