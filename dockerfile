@@ -8,7 +8,7 @@ WORKDIR /usr/src
 RUN chmod +x mvnw
 RUN ./mvnw clean verify
 
-EXPOSE 8080
+EXPOSE 80
 
 CMD ["java", "-jar","target/react-and-spring-data-rest-0.0.1-SNAPSHOT.jar"]
 #CMD ["npx", "nodemon", "index.js"]
