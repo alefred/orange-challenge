@@ -9,16 +9,14 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
     - uses: actions/checkout@v2
     - uses: azure/docker-login@v1
-    - name: Build the Docker image
       with:
         login-server: orangeacrfree01.azurecr.io
         username: orangeAcrFree01
         password: AWtIUO2fbWSxgL9Rr00LiP+ILTgeOpJz
-      run: |
+    - run: |
         docker build . -t mycontainer.azurecr.io/myapp:${{ github.sha }}
-        docker push mycontainer.azurecr.io/myapp:${{ github.sha }}
-        pwd
+        docker push mycontainer.azurecr.io/myapp:${{ github.sha }}     
