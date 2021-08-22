@@ -26,4 +26,4 @@ jobs:
       with:
         app-name: 'orangeApp01'
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-        images: 'mycontainer.azurecr.io/img-orange 
+        images: 'mycontainer.azurecr.io/img-orange'
