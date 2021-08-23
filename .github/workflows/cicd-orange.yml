@@ -22,8 +22,8 @@ jobs:
         username: orangeAcrFree02
         password: F0sezFkd4g/tgvgfX331Mzozk91Dm4A6
     - run: |
-        docker build -t orangeAcrFree02.azurecr.io/img-orangev2  .
-        docker push orangeAcrFree02.azurecr.io/img-orangev2   
+        docker build -t orangeAcrFree02.azurecr.io/img-orangev2 .
+        docker push orangeAcrFree02.azurecr.io/img-orangev2
   
   deploy:
     name: deploy-orange
