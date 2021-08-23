@@ -20,7 +20,7 @@ jobs:
       with:
         login-server: orangeacrfree02.azurecr.io
         username: orangeAcrFree02
-        password: F0sezFkd4g/tgvgfX331Mzozk91Dm4A6
+        password: p84nRqfkPQAMybtyutJ+YYBhIQVqdIlX
     - run: |
         docker build -t orangeAcrFree02.azurecr.io/img-orangev0 .
         docker push orangeAcrFree02.azurecr.io/img-orangev0
