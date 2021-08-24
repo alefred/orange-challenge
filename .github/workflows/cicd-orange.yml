@@ -18,12 +18,12 @@ jobs:
 
     - uses: azure/docker-login@v1
       with:
-        login-server: orangeacrfree02.azurecr.io
-        username: orangeAcrFree02
-        password: L4QR/ybxZsOyqIrOynt7VGnaW0EW0Bg4
+        login-server: orangeacr00.azurecr.io
+        username: orangeacr00
+        password: BUXBPl3szMpK7kxoruwdIlAsoT2LiB/x
     - run: |
-        docker build -t orangeacrfree02.azurecr.io/img-orangev0 .
-        docker push orangeacrfree02.azurecr.io/img-orangev0
+        docker build -t orangeacr00.azurecr.io/img-orangev0 .
+        docker push orangeacr00.azurecr.io/img-orangev0
   
   deploy:
     name: deploy-orange
@@ -34,4 +34,4 @@ jobs:
       with:
         app-name: 'orangeApp00'
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-        images: 'orangeacrfree02.azurecr.io/img-orangev0'
+        images: 'orangeacr00.azurecr.io/img-orangev0'
