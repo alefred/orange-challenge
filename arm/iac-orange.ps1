@@ -3,6 +3,6 @@ $rg = 'a4s_rg_dev'
 
 New-AzResourceGroupDeployment `
     -name 'IaC-Orange' `
-    -ResourceGroupName $rg `
-    -TemplateFile 'iac-orange.json' `
-    -webappName 'orangeApp00'
+    -TemplateFile 'iac-orange-pivot.json' `
+    -webappName 'orangeApp00' `
+    -ResourceGroupName $rg 

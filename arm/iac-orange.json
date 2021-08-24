@@ -10,9 +10,31 @@
     },
     "functions": [],
     "variables": {
-        "servicePlanName": "[concat(parameters('webAppName'), '-ServicePlan')]"
+        "servicePlanName": "[concat(parameters('webAppName'), '-ServicePlan')]",
+        "orangeAcr00Id": "[resourceId('Microsoft.ContainerRegistry/registries', 'orangeAcr00')]"
     },
     "resources": [
+        {
+            "name": "orangeAcr00",
+            "type": "Microsoft.ContainerRegistry/registries",
+            "apiVersion": "2020-11-01-preview",
+            "location": "East US 2",
+            "tags": {
+                "reason": "orange-challenge"
+            },
+            "sku": {
+                "name": "Standard",
+                "tier": "Standard"
+            },
+            "properties": {
+                "adminUserEnabled": true,
+                "dataEndpointEnabled": false,
+                "publicNetworkAccess": "Enabled",
+                "networkRuleBypassOptions": "AzureServices",
+                "zoneRedundancy": "Disabled",
+                "anonymousPullEnabled": false
+            }
+        },
         {
             "name": "[variables('servicePlanName')]",
             "type": "Microsoft.Web/serverfarms",
@@ -41,7 +63,8 @@
                 "reason": "orange-challenge"
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', variables('servicePlanName'))]"
+                "[resourceId('Microsoft.Web/serverfarms', variables('servicePlanName'))]",
+                "[resourceId('Microsoft.ContainerRegistry/registries', 'orangeAcr00')]"
             ],
             "properties": {                
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('servicePlanName'))]",
@@ -51,11 +74,23 @@
                         {
                             "name": "PORT",
                             "value": "8080"
+                        },
+                        {
+                            "name": "DOCKER_REGISTRY_SERVER_URL",
+                            "value": "https://orangeAcr00.azurecr.io"
+                        },
+                        {
+                            "name": "DOCKER_REGISTRY_SERVER_USERNAME",
+                            "value": "orangeAcr00"
+                        },
+                        {
+                            "name": "DOCKER_REGISTRY_SERVER_PASSWORD",
+                            "value": "[listCredentials(variables('orangeAcr00Id'),'2020-11-01-preview').passwords[0].value]"
                         }
                     ]
                 }
             }
-        }     
+        }  
     ],
     "outputs": {}
 }
