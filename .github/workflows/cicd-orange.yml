@@ -38,6 +38,7 @@ jobs:
   
   test:
     name: test-orange E2E on Chrome
+    needs: deploy
     runs-on: ubuntu-20.04
     # let's make sure our tests pass on Chrome browser
     steps:
