@@ -35,3 +35,13 @@ jobs:
         app-name: 'orangeApp00'
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
         images: 'orangeacr00.azurecr.io/img-orangev0'
+  
+  test:
+    name: test-orange E2E on Chrome
+    runs-on: ubuntu-20.04
+    # let's make sure our tests pass on Chrome browser
+    steps:
+      - uses: actions/checkout@v2
+      - uses: cypress-io/github-action@v2
+        with:
+          browser: chrome
