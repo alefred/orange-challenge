@@ -10,7 +10,7 @@ on:
 
 env:
   AZURE_RESOURCE_GROUP: orange_rg   # set this to your target resource group
-  AZURE_WEBAPP_NAME: orange_webapp # set this to your target web app
+  AZURE_WEBAPP_NAME: orange-webapp # set this to your target web app
   AZURE_SUBSCRIPTIONID: f3c3a373-0239-4818-bf69-367b5ce29218 #
 
 jobs:
