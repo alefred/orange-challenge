@@ -45,7 +45,7 @@ jobs:
     #     appName: ${{ env.AZURE_WEBAPP_NAME }}
     
     - name: Get ACR Admin
-      run: acr credential show --name orangeacr00 --query passwords[0].value
+      run: az acr credential show --name orangeacr00 --query passwords[0].value
       id: get-acradmin
 
     # - name: Azure CLI script
