@@ -32,7 +32,7 @@ jobs:
     - name: TestScript1
       run: 
         echo "variable incluye nombre del webapp ${{ env.AZURE_WEBAPP_NAME }}"
-        echo "variable del subscriptionid ${{ env.AZURE_SUSBCRIPTIONID }}
+        echo "variable del subscriptionid ${{ env.AZURE_SUSBCRIPTIONID }}"
 
      # Deploy ARM template
     - name: Run ARM deploy
