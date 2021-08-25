@@ -53,7 +53,7 @@ jobs:
       with:
         azcliversion: 2.0.72
         inlineScript: |
-            ::set-output name=ACR_PASS::az acr credential show --name acrAlefredDevOps --query passwords[0].value
+            ::set-output name=ACR_PASS::az acr credential show --name orangeacr00 --query passwords[0].value
 
   build:
     name: build
