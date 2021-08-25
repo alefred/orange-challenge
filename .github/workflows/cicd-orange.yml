@@ -22,7 +22,7 @@ jobs:
       with:
         subscriptionId: ${{ secrets.AZURE_CREDENTIALS.subscription_id }}
         resourceGroupName: 'orange_rg'
-        template: /arm/iac-orange.json
+        template: arm/iac-orange.json
         parameters: 
           webappName=orangeApp00
      
