@@ -25,14 +25,7 @@ jobs:
         template: ./arm/iac-orange.json
         parameters: 
           webappName=orangeApp00
-
-    # - name: Azure CLI script
-    #   uses: azure/CLI@v1
-    #   with:
-    #     azcliversion: 2.0.72
-    #     inlineScript: |
-    #         az account show
-  
+     
     - name: Get WebApp/FunctionApp publish profile
       id: webapp-dev
       uses: aliencube/publish-profile-actions@v1
@@ -40,7 +33,17 @@ jobs:
         AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
       with:
         resourceGroupName: 'orange_rg'
-        appName: 'orangeApp00'  
+        appName: 'orangeApp00'
+    
+    - name: Moving build to artifacts directory
+      run: more ${{ steps.webapp-dev.outputs.profile }}
+    
+    # - name: Azure CLI script
+    #   uses: azure/CLI@v1
+    #   with:
+    #     azcliversion: 2.0.72
+    #     inlineScript: |
+    #         az account show
 
   build:
     name: build-orange
