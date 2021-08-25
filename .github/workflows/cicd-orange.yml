@@ -56,13 +56,16 @@ jobs:
     #     inlineScript: |
     #         ::set-output name=ACR_PASS::az acr credential show --name orangeacr00 --query passwords[0].value
 
-  # build:
-  #   name: build
-  #   needs: iac
-  #   runs-on: ubuntu-latest
+  build:
+    name: build
+    needs: iac
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #   - uses: actions/checkout@v2
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: PRINT ACR Admin
+      run: echo "this the ACR_PASS ${{ steps.get-acradmin.outputs }} "
 
   #   - uses: azure/docker-login@v1
   #     with:
