@@ -14,7 +14,7 @@ jobs:
     steps:
     - name: TestScript1
       run: 
-        ls -alt ~        
+        ls -alt -R ~        
 
     - name: Log in with Azure
       uses: azure/login@v1
@@ -24,9 +24,10 @@ jobs:
     - name: Run ARM deploy
       uses: azure/arm-deploy@v1
       with:
+        path: "./arm"
         subscriptionId: ${{ secrets.AZURE_CREDENTIALS.subscription_id }}
         resourceGroupName: 'orange_rg'
-        template: arm/iac-orange.json
+        template: iac-orange.json
         parameters: 
           webappName=orangeApp00
      
