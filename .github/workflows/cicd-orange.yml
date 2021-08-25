@@ -18,6 +18,8 @@ jobs:
     name: IaaC
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@master
+
     - name: Log in with Azure
       uses: azure/login@v1
       with:
@@ -29,20 +31,16 @@ jobs:
         inlineScript: |
             az account list --query "[?isDefault].{subsid:id}" --output tsv
 
-    - name: TestScript1
-      run: 
-        echo "variable incluye nombre del webapp ${{ env.AZURE_WEBAPP_NAME }}"
-        echo "variable del subscriptionid ${{ env.AZURE_SUSBCRIPTIONID }}"
-
      # Deploy ARM template
     - name: Run ARM deploy
       uses: azure/arm-deploy@v1
       with:
         subscriptionId: ${{ env.AZURE_SUSBCRIPTIONID }}
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
-        template: ./iac-orange.json
+        template: ./arm-template/iac-orange.json
         parameters: webappName=${{ env.AZURE_WEBAPP_NAME }}
-     
+        
+     #Get publishing profile
     - name: Get WebApp/FunctionApp publish profile
       id: webapp-dev
       uses: aliencube/publish-profile-actions@v1
