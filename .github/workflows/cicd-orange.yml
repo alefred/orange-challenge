@@ -12,6 +12,9 @@ jobs:
   iac:
     runs-on: ubuntu-latest
     steps:
+    - name: TestScript1
+      run: ls -alt
+
     - name: Log in with Azure
       uses: azure/login@v1
       with:
@@ -35,7 +38,7 @@ jobs:
         resourceGroupName: 'orange_rg'
         appName: 'orangeApp00'
     
-    - name: Moving build to artifacts directory
+    - name: TestScript2
       run: more ${{ steps.webapp-dev.outputs.profile }}
     
     # - name: Azure CLI script
