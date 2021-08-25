@@ -1,0 +1,11 @@
+$appName="orangeApp"
+$rgName="rg-orange-test"
+#new AD application
+az ad app create `
+--display-name $appName `
+--homepage "http://localhost/$appName" `
+--identifier-uris http://localhost/$appName
+
+az group create --resource-group $rgName --location "East US 2"
+#create a new service principal
+az ad sp create-for-rbac --name $appName --role contributor --scopes '/subscriptions/f3c3a373-0239-4818-bf69-367b5ce29218/resourceGroups/rg-orange-test' --sdk-auth
