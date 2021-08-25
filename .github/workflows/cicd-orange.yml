@@ -38,7 +38,7 @@ jobs:
         subscriptionId: ${{ env.AZURE_SUSBCRIPTIONID }}
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
         template: ./arm-template/iac-orange.json
-        parameters: webappName=${{ env.AZURE_WEBAPP_NAME }}
+        parameters: webAppName=${{ env.AZURE_WEBAPP_NAME }}
         
      #Get publishing profile
     - name: Get WebApp/FunctionApp publish profile
