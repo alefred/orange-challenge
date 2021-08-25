@@ -13,7 +13,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: TestScript1
-      run: ls -alt
+      run: 
+        ls -alt
+        ls -alt ../
+        ls -alt ../../
+        pwd
 
     - name: Log in with Azure
       uses: azure/login@v1
