@@ -9,6 +9,39 @@ on:
       - main
 
 jobs:
+  aztest:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Log in with Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+     # Deploy ARM template
+    - name: Run ARM deploy
+      uses: azure/arm-deploy@v1
+      with:
+        subscriptionId: ${{ secrets.AZURE_CREDENTIALS.subscription_id }}
+        resourceGroupName: 'orange_rg'
+        template: ./arm/iac-orange.json
+        parameters: 
+          webappName=orangeApp00
+
+    # - name: Azure CLI script
+    #   uses: azure/CLI@v1
+    #   with:
+    #     azcliversion: 2.0.72
+    #     inlineScript: |
+    #         az account show
+  
+    - name: Get WebApp/FunctionApp publish profile
+      id: webapp-dev
+      uses: aliencube/publish-profile-actions@v1
+      env:
+        AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+      with:
+        resourceGroupName: 'orange_rg'
+        appName: 'orangeApp00'  
+
   build:
     name: build-orange
     runs-on: ubuntu-latest
@@ -33,7 +66,7 @@ jobs:
     - uses: azure/webapps-deploy@v2
       with:
         app-name: 'orangeApp00'
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        publish-profile: ${{ steps.webapp-dev.outputs.profile }}
         images: 'orangeacr00.azurecr.io/img-orangev0'
   
   test:
@@ -47,18 +80,3 @@ jobs:
         with:
           browser: chrome
 
-  aztest:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Log in with Azure
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-    - name: Azure CLI script
-      uses: azure/CLI@v1
-      with:
-        azcliversion: 2.0.72
-        inlineScript: |
-            az account show
-            az storage -h

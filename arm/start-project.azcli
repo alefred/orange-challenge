@@ -1,12 +1,13 @@
+#execute in powerShell
 #Variables
-$appName="orangeApp"
+$appSpName="orange-spApp"
 $rgName="orange_rg"
 $subscriptionId = az account show --query id --output tsv
 
 #create a new service principal
 az group create --resource-group $rgName --location "East US 2"
-az ad sp create-for-rbac --name $appName --role contributor --scopes "/subscriptions/$subscriptionId/resourceGroups/$rgName" --sdk-auth
+az ad sp create-for-rbac --name $appSpName --role contributor --scopes "/subscriptions/$subscriptionId/resourceGroups/$rgName" --sdk-auth
 
 # Delete Section
-az group delete --name $rgName --yes
-az ad sp delete --id (az ad sp list --display-name $appName --query "[].appId" --output tsv)
+az group delete --resource-group $rgName --yes
+az ad sp delete --id (az ad sp list --display-name $appSpName --query "[].appId" --output tsv)

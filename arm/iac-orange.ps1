@@ -1,5 +1,5 @@
 # iniciar el arm template con: arm!
-$rg = 'a4s_rg_dev'
+$rg = 'orange_rg'
 
 New-AzResourceGroupDeployment `
     -name 'IaC-Orange' `
