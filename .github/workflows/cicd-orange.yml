@@ -44,16 +44,17 @@ jobs:
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
         appName: ${{ env.AZURE_WEBAPP_NAME }}
     
-    #- name: TestScript2
-    #  run: echo ${{ steps.webapp-dev.outputs.profile }}    
-
-    - name: Azure CLI script
-      uses: azure/CLI@v1
+    - name: get-acradmin
+      run: echo '::set-output name=ACR_PASS::az acr credential show --name orangeacr00 --query passwords[0].value'
       id: get-acradmin
-      with:
-        azcliversion: 2.0.72
-        inlineScript: |
-            ::set-output name=ACR_PASS::az acr credential show --name orangeacr00 --query passwords[0].value
+
+    # - name: Azure CLI script
+    #   uses: azure/CLI@v1
+    #   id: get-acradmin
+    #   with:
+    #     azcliversion: 2.0.72
+    #     inlineScript: |
+    #         ::set-output name=ACR_PASS::az acr credential show --name orangeacr00 --query passwords[0].value
 
   build:
     name: build
