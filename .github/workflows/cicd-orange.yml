@@ -24,18 +24,12 @@ jobs:
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
-    - name: Azure CLI script
-      uses: azure/CLI@v1
-      with:
-        azcliversion: 2.0.72
-        inlineScript: |
-            az account list --query "[?isDefault].{subsid:id}" --output tsv
 
      # Deploy ARM template
     - name: Run ARM deploy
       uses: azure/arm-deploy@v1
       with:
-        subscriptionId: ${{ env.AZURE_SUSBCRIPTIONID }}
+        #subscriptionId: ${{ env.AZURE_SUSBCRIPTIONID }}
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
         template: ./arm-template/iac-orange.json
         parameters: webAppName=${{ env.AZURE_WEBAPP_NAME }}
@@ -53,6 +47,14 @@ jobs:
     - name: TestScript2
       run: more ${{ steps.webapp-dev.outputs.profile }}    
 
+    - name: Azure CLI script
+      uses: azure/CLI@v1
+      id: get-acradmin
+      with:
+        azcliversion: 2.0.72
+        inlineScript: |
+            ::set-output name=ACR_PASS::az acr credential show --name acrAlefredDevOps --query passwords[0].value
+
   build:
     name: build
     needs: iac
@@ -65,7 +67,7 @@ jobs:
       with:
         login-server: orangeacr00.azurecr.io
         username: orangeacr00
-        password: BUXBPl3szMpK7kxoruwdIlAsoT2LiB/x
+        password: ${{ steps.get-acradmin.outputs.ACR_PASS }}
     - run: |
         docker build -t orangeacr00.azurecr.io/img-orangev0 .
         docker push orangeacr00.azurecr.io/img-orangev0
