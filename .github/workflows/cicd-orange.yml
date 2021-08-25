@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  aztest:
+  iac:
     runs-on: ubuntu-latest
     steps:
     - name: Log in with Azure
@@ -47,6 +47,7 @@ jobs:
 
   build:
     name: build-orange
+    needs: iac
     runs-on: ubuntu-latest
 
     steps:
