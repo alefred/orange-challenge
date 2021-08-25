@@ -25,28 +25,27 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-     # Deploy ARM template
-    - name: Run ARM deploy
-      uses: azure/arm-deploy@v1
-      with:
-        #subscriptionId: ${{ env.AZURE_SUSBCRIPTIONID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
-        template: ./arm-template/iac-orange.json
-        parameters: webAppName=${{ env.AZURE_WEBAPP_NAME }}
+    #  # Deploy ARM template
+    # - name: Run ARM deploy
+    #   uses: azure/arm-deploy@v1
+    #   with:
+    #     #subscriptionId: ${{ env.AZURE_SUSBCRIPTIONID }}
+    #     resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
+    #     template: ./arm-template/iac-orange.json
+    #     parameters: webAppName=${{ env.AZURE_WEBAPP_NAME }}
         
-     #Get publishing profile
-    - name: Get WebApp/FunctionApp publish profile
-      id: webapp-dev
-      uses: aliencube/publish-profile-actions@v1
-      env:
-        AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-      with:
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
-        appName: ${{ env.AZURE_WEBAPP_NAME }}
+    #  #Get publishing profile
+    # - name: Get WebApp/FunctionApp publish profile
+    #   id: webapp-dev
+    #   uses: aliencube/publish-profile-actions@v1
+    #   env:
+    #     AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+    #   with:
+    #     resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
+    #     appName: ${{ env.AZURE_WEBAPP_NAME }}
     
     - name: Get ACR Admin
-      uses: azure/CLI@v1
-      run: echo '::set-output name=ACR_PASS::az acr credential show --name orangeacr00 --query passwords[0].value'
+      run: acr credential show --name orangeacr00 --query passwords[0].value
       id: get-acradmin
 
     # - name: Azure CLI script
