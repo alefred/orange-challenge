@@ -14,6 +14,7 @@ env:
 
 jobs:
   iac:
+    name: IaaC
     runs-on: ubuntu-latest
     steps:
     - name: Log in with Azure
@@ -23,7 +24,8 @@ jobs:
 
     - name: TestScript1
       run: 
-        echo ${{ env.AZURE_WEBAPP_NAME }} 
+        ls -alt
+        echo ${{ env.AZURE_WEBAPP_NAME }} //
         echo ${{ secrets.AZURE_CREDENTIALS.subscription_id }}      
 
      # Deploy ARM template
@@ -32,7 +34,7 @@ jobs:
       with:
         subscriptionId: ${{ secrets.AZURE_CREDENTIALS.subscription_id }}
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
-        template: ./arm-template/iac-orange.json
+        template: arm-template/iac-orange.json
         parameters: 
           webappName=${{ env.AZURE_WEBAPP_NAME }}
      
@@ -56,7 +58,7 @@ jobs:
     #         az account show
 
   build:
-    name: build-orange
+    name: build
     needs: iac
     runs-on: ubuntu-latest
 
@@ -73,7 +75,7 @@ jobs:
         docker push orangeacr00.azurecr.io/img-orangev0
   
   deploy:
-    name: deploy-orange
+    name: deploy
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -84,7 +86,7 @@ jobs:
         images: 'orangeacr00.azurecr.io/img-orangev0'
   
   test:
-    name: test-orange E2E on Chrome
+    name: test
     needs: deploy
     runs-on: ubuntu-20.04
     # let's make sure our tests pass on Chrome browser
