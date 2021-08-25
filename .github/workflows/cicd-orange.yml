@@ -44,7 +44,8 @@ jobs:
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
         appName: ${{ env.AZURE_WEBAPP_NAME }}
     
-    - name: get-acradmin
+    - name: Get ACR Admin
+      uses: azure/CLI@v1
       run: echo '::set-output name=ACR_PASS::az acr credential show --name orangeacr00 --query passwords[0].value'
       id: get-acradmin
 
@@ -56,42 +57,42 @@ jobs:
     #     inlineScript: |
     #         ::set-output name=ACR_PASS::az acr credential show --name orangeacr00 --query passwords[0].value
 
-  build:
-    name: build
-    needs: iac
-    runs-on: ubuntu-latest
+  # build:
+  #   name: build
+  #   needs: iac
+  #   runs-on: ubuntu-latest
 
-    steps:
-    - uses: actions/checkout@v2
+  #   steps:
+  #   - uses: actions/checkout@v2
 
-    - uses: azure/docker-login@v1
-      with:
-        login-server: orangeacr00.azurecr.io
-        username: orangeacr00
-        password: ${{ steps.get-acradmin.outputs.ACR_PASS }}
-    - run: |
-        docker build -t orangeacr00.azurecr.io/img-orangev0 .
-        docker push orangeacr00.azurecr.io/img-orangev0
+  #   - uses: azure/docker-login@v1
+  #     with:
+  #       login-server: orangeacr00.azurecr.io
+  #       username: orangeacr00
+  #       password: ${{ steps.get-acradmin.outputs.ACR_PASS }}
+  #   - run: |
+  #       docker build -t orangeacr00.azurecr.io/img-orangev0 .
+  #       docker push orangeacr00.azurecr.io/img-orangev0
   
-  deploy:
-    name: deploy
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-    - uses: azure/webapps-deploy@v2
-      with:
-        app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ steps.webapp-dev.outputs.profile }}
-        images: 'orangeacr00.azurecr.io/img-orangev0'
+  # deploy:
+  #   name: deploy
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: azure/webapps-deploy@v2
+  #     with:
+  #       app-name: ${{ env.AZURE_WEBAPP_NAME }}
+  #       publish-profile: ${{ steps.webapp-dev.outputs.profile }}
+  #       images: 'orangeacr00.azurecr.io/img-orangev0'
   
-  test:
-    name: test
-    needs: deploy
-    runs-on: ubuntu-20.04
-    # let's make sure our tests pass on Chrome browser
-    steps:
-      - uses: actions/checkout@v2
-      - uses: cypress-io/github-action@v2
-        with:
-          browser: chrome
+  # test:
+  #   name: test
+  #   needs: deploy
+  #   runs-on: ubuntu-20.04
+  #   # let's make sure our tests pass on Chrome browser
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: cypress-io/github-action@v2
+  #       with:
+  #         browser: chrome
 
