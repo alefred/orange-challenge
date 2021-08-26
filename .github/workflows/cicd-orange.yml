@@ -11,31 +11,27 @@ on:
 env:
   AZURE_RESOURCE_GROUP: orange_rg   # set this to your target resource group
   AZURE_WEBAPP_NAME: orange-webapp # set this to your target web app
-  #AZURE_SUBSCRIPTIONID: f3c3a373-0239-4818-bf69-367b5ce29218 #
 
 jobs:
-  # iac:
-  #   name: iac
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@main
-  #   #Login to Azure
-  #   - name: Log in with Azure
-  #     uses: azure/login@v1
-  #     with:
-  #       creds: ${{ secrets.AZURE_CREDENTIALS }}
-  #   #TODO: DELETE THIS LINES
-  #   - name: Get ACR Admin
-  #     run: az acr credential show --name orangeacr00 --query passwords[0].value --output tsv
+  iac:
+    name: iac
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@main
+    #Login to Azure
+    - name: Log in with Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    #  # Deploy ARM template
-    # - name: Run ARM deploy
-    #   uses: azure/arm-deploy@v1
-    #   with:
-    #     #subscriptionId: ${{ env.AZURE_SUSBCRIPTIONID }}
-    #     resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
-    #     template: ./arm-template/iac-orange.json
-    #     parameters: webAppName=${{ env.AZURE_WEBAPP_NAME }}
+     # Deploy ARM template
+    - name: Run ARM deploy
+      uses: azure/arm-deploy@v1
+      with:
+        #subscriptionId: ${{ env.AZURE_SUSBCRIPTIONID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
+        template: ./arm-template/iac-orange.json
+        parameters: webAppName=${{ env.AZURE_WEBAPP_NAME }}
 
   build:
     name: build
@@ -49,15 +45,6 @@ jobs:
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
-    #Get publishing profile
-    # - name: Get WebApp4Containers publish profile
-    #   id: webapp-dev
-    #   uses: aliencube/publish-profile-actions@v1
-    #   env:
-    #     AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-    #   with:
-    #     resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
-    #     appName: ${{ env.AZURE_WEBAPP_NAME }}
     - name: publish-profile to file
       run: az webapp deployment list-publishing-profiles -g orange_rg  -n orange-webapp  --xml >> ${{ env.AZURE_WEBAPP_NAME }}.PublishSettings 
     - name: Save publish-profile
@@ -71,31 +58,29 @@ jobs:
       run: echo "ACR_PASS=$(az acr credential show --name orangeacr00 --query passwords[0].value --output tsv)" >> $GITHUB_ENV
       id: get-acradmin
 
-    # #Build image to ACR
-    # - uses: azure/docker-login@v1
-    #   with:
-    #     login-server: orangeacr00.azurecr.io
-    #     username: orangeAcr00
-    #     password: ${{ env.ACR_PASS }}
-    # - run: |
-    #     docker build -t orangeacr00.azurecr.io/img-orangev0 .
-    #     docker push orangeacr00.azurecr.io/img-orangev0
+    #Build image to ACR
+    - uses: azure/docker-login@v1
+      with:
+        login-server: orangeacr00.azurecr.io
+        username: orangeAcr00
+        password: ${{ env.ACR_PASS }}
+    - run: |
+        docker build -t orangeacr00.azurecr.io/img-orangev0 .
+        docker push orangeacr00.azurecr.io/img-orangev0
   
   deploy:
     name: deploy
     needs: build
     runs-on: ubuntu-latest
+    #Get Publishing profile
     steps:
     - name: Load publish-profile
       uses: actions/download-artifact@v1
       with:
         name: publishfile
-    #TODO: DELETE THIS LINES
-    - name: TEST LINES
-      run: 
-        echo "PUB_PROF=$(cat publishfile/orange-webapp.PublishSettings)" >> $GITHUB_ENV
-        cat ${{ env.PUB_PROF }}
-    ##
+    - name: publishfile to variable
+      run: echo "PUB_PROF=$(cat publishfile/orange-webapp.PublishSettings)" >> $GITHUB_ENV
+    #Deploy WebApp
     - uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
