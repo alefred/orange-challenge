@@ -59,7 +59,7 @@ jobs:
     #     resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
     #     appName: ${{ env.AZURE_WEBAPP_NAME }}
     - name: publish-profile to file
-      run: echo "az webapp deployment list-publishing-profiles -g orange_rg  -n orange-webapp  --xml" > ${{ env.AZURE_WEBAPP_NAME }}.PublishSettings 
+      run: az webapp deployment list-publishing-profiles -g orange_rg  -n orange-webapp  --xml > ${{ env.AZURE_WEBAPP_NAME }}.PublishSettings 
     - name: Save publish-profile
       uses: actions/upload-artifact@v1
       with:
