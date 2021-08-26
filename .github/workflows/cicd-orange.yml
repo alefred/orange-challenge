@@ -104,7 +104,7 @@ jobs:
     env:
       NODE_ENV: test
       SELENIUM_HUB_HOST: hub
-      TEST_HOST: ${{ env.AZURE_WEBAPP_NAME }}.azurewebsites.net
+      TEST_HOST: '${{ env.AZURE_WEBAPP_NAME }}.azurewebsites.net'
     services:
       hub:
         image: selenium/hub:3.141.59-gold
