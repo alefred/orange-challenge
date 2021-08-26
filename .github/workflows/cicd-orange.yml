@@ -10,7 +10,7 @@ on:
 
 env:
   AZURE_RESOURCE_GROUP: orange_rg   # set this to your target resource group
-  AZURE_WEBAPP_NAME: orangeWebappFinal # set this to your target web app  ${{ secrets.AZURE_APP_NAME }} -acr
+  AZURE_WEBAPP_NAME: orangeWebappFinal # ${{ env.AZURE_WEBAPP_NAME }} 
   AZURE_ACR_NAME: orangeWebappFinalAcr # net to finish in "Acr"
 
 jobs:
@@ -39,7 +39,7 @@ jobs:
       with:
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
         template: ./arm-template/iac-orange.json
-        parameters: webAppName=${{ secrets.AZURE_APP_NAME }}
+        parameters: webAppName=${{ env.AZURE_WEBAPP_NAME }} 
 
   build:
     name: build
