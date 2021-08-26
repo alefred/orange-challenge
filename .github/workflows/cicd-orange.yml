@@ -18,12 +18,15 @@ jobs:
     name: IaaC
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-
+    - uses: actions/checkout@main
+    #Login to Azure
     - name: Log in with Azure
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
+    #TODO: DELETE THIS LINES
+    - name: Get ACR Admin
+      run: echo "ACR_PASS=$(az acr credential show --name orangeacr00 --query passwords[0].value)" >> $GITHUB_ENV
 
     #  # Deploy ARM template
     # - name: Run ARM deploy
@@ -33,31 +36,6 @@ jobs:
     #     resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
     #     template: ./arm-template/iac-orange.json
     #     parameters: webAppName=${{ env.AZURE_WEBAPP_NAME }}
-        
-    #  #Get publishing profile
-    # - name: Get WebApp/FunctionApp publish profile
-    #   id: webapp-dev
-    #   uses: aliencube/publish-profile-actions@v1
-    #   env:
-    #     AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-    #   with:
-    #     resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
-    #     appName: ${{ env.AZURE_WEBAPP_NAME }}
-    
-    - name: Get ACR Admin
-      run: echo "ACR_PASS=$(az acr credential show --name orangeacr00 --query passwords[0].value)" >> $GITHUB_ENV
-      id: get-acradmin
-    
-    - name: PRINT ACR Admin
-      run: echo $ACR_PASS
-
-    # - name: Azure CLI script
-    #   uses: azure/CLI@v1
-    #   id: get-acradmin
-    #   with:
-    #     azcliversion: 2.0.72
-    #     inlineScript: |
-    #         ::set-output name=ACR_PASS::az acr credential show --name orangeacr00 --query passwords[0].value
 
   build:
     name: build
@@ -65,19 +43,37 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-
+    - uses: actions/checkout@main
+    #**Login to Azure
+    - name: Log in with Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    #Get publishing profile
+    - name: Get WebApp/FunctionApp publish profile
+      id: webapp-dev
+      uses: aliencube/publish-profile-actions@v1
+      env:
+        AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+      with:
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
+        appName: ${{ env.AZURE_WEBAPP_NAME }}
+    #Get ACR Credentials
+    - name: Get ACR Admin
+      run: echo "ACR_PASS=$(az acr credential show --name orangeacr00 --query passwords[0].value)" >> $GITHUB_ENV
+      id: get-acradmin
+    #TODO: DELETE
     - name: PRINT ACR Admin
-      run: echo ${{ jobs.iac.steps.get-acradmin.outputs.ACR_PASS }}
-
-  #   - uses: azure/docker-login@v1
-  #     with:
-  #       login-server: orangeacr00.azurecr.io
-  #       username: orangeacr00
-  #       password: ${{ steps.get-acradmin.outputs.ACR_PASS }}
-  #   - run: |
-  #       docker build -t orangeacr00.azurecr.io/img-orangev0 .
-  #       docker push orangeacr00.azurecr.io/img-orangev0
+      run: echo ${{ steps.get-acradmin.outputs.ACR_PASS }}
+    #Build image to ACR
+    - uses: azure/docker-login@v1
+      with:
+        login-server: orangeacr00.azurecr.io
+        username: orangeacr00
+        password: ${{ steps.get-acradmin.outputs.ACR_PASS }}
+    - run: |
+        docker build -t orangeacr00.azurecr.io/img-orangev0 .
+        docker push orangeacr00.azurecr.io/img-orangev0
   
   # deploy:
   #   name: deploy
