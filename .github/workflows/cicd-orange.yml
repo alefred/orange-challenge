@@ -27,7 +27,7 @@ jobs:
     #TODO: SECTION TO TEST
     - name: publishing-file to variable
       env:
-        DEMO: ${{ secrets.secrets.AZURE_APP_NAME }}
+        DEMO: ${{ secrets.AZURE_APP_NAME }}
       run: echo $DEMO
     
     # TODO: test mode incremental arm
