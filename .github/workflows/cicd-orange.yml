@@ -10,8 +10,8 @@ on:
 
 env:
   AZURE_RESOURCE_GROUP: orange_rg   # set this to your target resource group
-  AZURE_ACR_NAME: ${{ secrets.AZURE_APP_NAME }}Acr        # set this to your target ACR name ${{ env.AZURE_ACR_NAME }}
-  #AZURE_WEBAPP_NAME: orange-webapp # set this to your target web app  ${{ secrets.AZURE_APP_NAME }} -acr
+  AZURE_WEBAPP_NAME: orangeWebappFinal # set this to your target web app  ${{ secrets.AZURE_APP_NAME }} -acr
+  AZURE_ACR_NAME: ${{ env.AZURE_WEBAPP_NAME }}Acr        # set this to your target ACR name ${{ env.AZURE_ACR_NAME }}
 
 jobs:
   iac:
@@ -26,9 +26,7 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     #TODO: SECTION TO TEST
     - name: publishing-file to variable
-      env:
-        DEMO: ${{ secrets.AZURE_APP_NAME }}
-      run: echo $DEMO
+      run: echo $AZURE_ACR_NAME
     
     # TODO: test mode incremental arm
     # - name: Clean up Resource Group
