@@ -3,6 +3,6 @@ $rg = 'orange_rg'
 
 New-AzResourceGroupDeployment `
     -name 'IaC-Orange' `
-    -TemplateFile 'iac-orange.json' `
-    -webappName 'orangeApp00' `
+    -TemplateFile '.\arm-template\iac-orange.json' `
+    -webappName 'orangeAppbetatest01' `
     -ResourceGroupName $rg 

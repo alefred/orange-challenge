@@ -10,7 +10,7 @@ on:
 
 env:
   AZURE_RESOURCE_GROUP: orange_rg   # set this to your target resource group
-  AZURE_ACR_NAME: '${{ secrets.AZURE_APP_NAME }}-acr'        # set this to your target ACR name ${{ env.AZURE_ACR_NAME }}
+  AZURE_ACR_NAME: '${{ secrets.AZURE_APP_NAME }}Acr'        # set this to your target ACR name ${{ env.AZURE_ACR_NAME }}
   #AZURE_WEBAPP_NAME: orange-webapp # set this to your target web app  ${{ secrets.AZURE_APP_NAME }} -acr
 
 jobs:

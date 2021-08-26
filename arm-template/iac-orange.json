@@ -11,7 +11,7 @@
     "functions": [],
     "variables": {
         "servicePlanName": "[concat(parameters('webAppName'), '-ServicePlan')]",
-        "acrName": "[concat(parameters('webAppName'), '-acr')]",
+        "acrName": "[concat(parameters('webAppName'), 'Acr')]",
         "acrId": "[resourceId('Microsoft.ContainerRegistry/registries', variables('acrName'))]",
         "acrUrl": "[concat('https://', variables('acrName'), '.azurecr.io')]"
     },
