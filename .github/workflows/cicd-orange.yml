@@ -24,13 +24,13 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     
-    # Deploy ARM template
-    - name: Clean up Resource Group
-      uses: azure/arm-deploy@v1
-      with:
-        #subscriptionId: ${{ env.AZURE_SUSBCRIPTIONID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
-        template: ./arm-template/iac-cleanup.json
+    # TODO: test mode incremental arm
+    # - name: Clean up Resource Group
+    #   uses: azure/arm-deploy@v1
+    #   with:
+    #     #subscriptionId: ${{ env.AZURE_SUSBCRIPTIONID }}
+    #     resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
+    #     template: ./arm-template/iac-cleanup.json
 
      # Deploy ARM template
     - name: Run ARM deploy
