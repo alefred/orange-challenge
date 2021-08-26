@@ -50,16 +50,16 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     #Get publishing profile
-    - name: Get WebApp4Containers publish profile
-      id: webapp-dev
-      uses: aliencube/publish-profile-actions@v1
-      env:
-        AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-      with:
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
-        appName: ${{ env.AZURE_WEBAPP_NAME }}
+    # - name: Get WebApp4Containers publish profile
+    #   id: webapp-dev
+    #   uses: aliencube/publish-profile-actions@v1
+    #   env:
+    #     AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+    #   with:
+    #     resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
+    #     appName: ${{ env.AZURE_WEBAPP_NAME }}
     - name: publish-profile to file
-      run: echo "${{ steps.webapp-dev.outputs.profile }}" > ${{ env.AZURE_WEBAPP_NAME }}.PublishSettings 
+      run: echo "az webapp deployment list-publishing-profiles -g orange_rg  -n orange-webapp  --xml" > ${{ env.AZURE_WEBAPP_NAME }}.PublishSettings 
     - name: Save publish-profile
       uses: actions/upload-artifact@v1
       with:
@@ -92,12 +92,12 @@ jobs:
         name: publishfile
     #TODO: DELETE THIS LINES
     - name: TEST LINES
-      run: echo "PUB_PROF=$(cat publishfile/orange-webapp.PublishSettings)" >> $GITHUB_ENV
+      run: cat publishfile/orange-webapp.PublishSettings 
     ##
     - uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ env.PUB_PROF }}
+        publish-profile: publishfile/orange-webapp.PublishSettings 
         images: 'orangeacr00.azurecr.io/img-orangev0'
   
   # test:
