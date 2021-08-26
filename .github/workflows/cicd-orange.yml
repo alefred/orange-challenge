@@ -26,7 +26,7 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     #TODO: SECTION TO TEST
     - name: publishing-file to variable
-      run: echo " ${{ secrets.AZURE_APP_NAME }}"
+      run: echo ${{ secrets.AZURE_APP_NAME }}
     
     # TODO: test mode incremental arm
     # - name: Clean up Resource Group
