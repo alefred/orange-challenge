@@ -26,7 +26,7 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     #TODO: DELETE THIS LINES
     - name: Get ACR Admin
-      run: az acr credential show --name orangeacr00 --query passwords[0].value
+      run: az acr credential show --name orangeacr00 --query passwords[0].value --output tsv
 
     #  # Deploy ARM template
     # - name: Run ARM deploy
@@ -60,7 +60,7 @@ jobs:
         appName: ${{ env.AZURE_WEBAPP_NAME }}
     #Get ACR Credentials
     - name: Get ACR Admin
-      run: echo "ACR_PASS=$(az acr credential show --name orangeacr00 --query passwords[0].value)" >> $GITHUB_ENV
+      run: echo "ACR_PASS=$(az acr credential show --name orangeacr00 --query passwords[0].value --output tsv)" >> $GITHUB_ENV
       id: get-acradmin
     #TODO: DELETE
     - name: PRINT ACR Admin
