@@ -113,13 +113,13 @@ jobs:
         env:
           HUB_HOST: hub
           HUB_PORT: 4444
-    # steps:
-    #   - name: Checkout
-    #     uses: actions/checkout@v1.2.0
-    #   - name: Install
-    #     run: yarn
-    #   - name: Lint
-    #     run: yarn lint
-    #   - name: Test
-    #     run: yarn test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1.2.0
+      - name: Install
+        run: yarn
+      - name: Lint
+        run: yarn lint
+      - name: Test
+        run: yarn test
 
