@@ -26,7 +26,7 @@ jobs:
     #TODO: SECTION TO TEST
     - name: publishing-file to variable
       env:
-        DEMO: ${{ env.AZURE_WEBAPP_NAME }}Acr
+        ACR: ${{ env.AZURE_WEBAPP_NAME }}Acr
       run: echo $DEMO
     
     # TODO: test mode incremental arm
@@ -37,68 +37,74 @@ jobs:
     #     resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
     #     template: ./arm-template/iac-cleanup.json
 
-    #  # Deploy ARM template
-    # - name: Run ARM deploy
-    #   uses: azure/arm-deploy@v1
-    #   with:
-    #     #subscriptionId: ${{ env.AZURE_SUSBCRIPTIONID }}
-    #     resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
-    #     template: ./arm-template/iac-orange.json
-    #     parameters: webAppName=${{ secrets.AZURE_APP_NAME }}
+     # Deploy ARM template
+    - name: Run ARM deploy
+      uses: azure/arm-deploy@v1
+      with:
+        #subscriptionId: ${{ env.AZURE_SUSBCRIPTIONID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
+        template: ./arm-template/iac-orange.json
+        parameters: webAppName=${{ secrets.AZURE_APP_NAME }}
 
-  # build:
-  #   name: build
-  #   needs: iac
-  #   runs-on: ubuntu-latest
+  build:
+    name: build
+    needs: iac
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #   - uses: actions/checkout@main
-  #   #**Login to Azure
-  #   - name: Log in with Azure
-  #     uses: azure/login@v1
-  #     with:
-  #       creds: ${{ secrets.AZURE_CREDENTIALS }}
-  #   - name: publish-profile to file
-  #     run: az webapp deployment list-publishing-profiles -g orange_rg  -n orange-webapp  --xml >> ${{ secrets.AZURE_APP_NAME }}.PublishSettings 
-  #   - name: Save publish-profile
-  #     uses: actions/upload-artifact@v1
-  #     with:
-  #       name: publishfile
-  #       path: ${{ secrets.AZURE_APP_NAME }}.PublishSettings 
+    steps:
+    - uses: actions/checkout@main
+    #**Login to Azure
+    - name: Log in with Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - name: publish-profile to file
+      run: az webapp deployment list-publishing-profiles -g orange_rg  -n orange-webapp  --xml >> ${{ secrets.AZURE_APP_NAME }}.PublishSettings 
+    - name: Save publish-profile
+      uses: actions/upload-artifact@v1
+      with:
+        name: publishfile
+        path: ${{ secrets.AZURE_APP_NAME }}.PublishSettings 
 
-  #   #Get ACR Credentials
-  #   - name: Get ACR Admin
-  #     run: echo "ACR_PASS=$(az acr credential show --name $AZURE_ACR_NAME --query passwords[0].value --output tsv)" >> $GITHUB_ENV
-  #     id: get-acradmin
+    #Get ACR Credentials
+    - name: Get ACR Admin
+      env:
+        ACR: ${{ env.AZURE_WEBAPP_NAME }}Acr
+      run: echo "ACR_PASS=$(az acr credential show --name $ACR --query passwords[0].value --output tsv)" >> $GITHUB_ENV
+      id: get-acradmin
 
-  #   #Build image to ACR
-  #   - uses: azure/docker-login@v1
-  #     with:
-  #       login-server: ${{ env.AZURE_ACR_NAME }}.azurecr.io
-  #       username: ${{ env.AZURE_ACR_NAME }}
-  #       password: ${{ env.ACR_PASS }}
-  #   - run: |
-  #       docker build -t ${{ env.AZURE_ACR_NAME }}.azurecr.io/img-orangev0 .
-  #       docker push ${{ env.AZURE_ACR_NAME }}.azurecr.io/img-orangev0
+    #Build image to ACR
+    - uses: azure/docker-login@v1
+      env:
+        ACR: ${{ env.AZURE_WEBAPP_NAME }}Acr
+      with:
+        login-server: $ACR.azurecr.io
+        username: $ACR
+        password: ${{ env.ACR_PASS }}
+    - run: |
+        docker build -t $ACR.azurecr.io/img-orangev0 .
+        docker push $ACR.azurecr.io/img-orangev0
   
-  # deploy:
-  #   name: deploy
-  #   needs: build
-  #   runs-on: ubuntu-latest
-  #   #Get Publishing profile
-  #   steps:
-  #   - name: Load publishing-file
-  #     uses: actions/download-artifact@v1
-  #     with:
-  #       name: publishfile
-  #   - name: publishing-file to variable
-  #     run: echo "PUB_PROF=$(cat publishfile/orange-webapp.PublishSettings)" >> $GITHUB_ENV
-  #   #Deploy WebApp
-  #   - uses: azure/webapps-deploy@v2
-  #     with:
-  #       app-name: ${{ secrets.AZURE_APP_NAME }}
-  #       publish-profile: ${{ env.PUB_PROF }}
-  #       images: '${{ env.AZURE_ACR_NAME }}.azurecr.io/img-orangev0'
+  deploy:
+    name: deploy
+    needs: build
+    runs-on: ubuntu-latest
+    #Get Publishing profile
+    steps:
+    - name: Load publishing-file
+      uses: actions/download-artifact@v1
+      with:
+        name: publishfile
+    - name: publishing-file to variable
+      run: echo "PUB_PROF=$(cat publishfile/orange-webapp.PublishSettings)" >> $GITHUB_ENV
+    #Deploy WebApp
+    - uses: azure/webapps-deploy@v2
+      env:
+        ACR: ${{ env.AZURE_WEBAPP_NAME }}Acr
+      with:
+        app-name: ${{ secrets.AZURE_APP_NAME }}
+        publish-profile: ${{ env.PUB_PROF }}
+        images: '$ACR.azurecr.io/img-orangev0'
   
   # test:
   #   name: test
