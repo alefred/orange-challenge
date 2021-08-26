@@ -15,7 +15,7 @@ env:
 
 jobs:
   iac:
-    name: IaaC
+    name: iac
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@main
@@ -58,6 +58,14 @@ jobs:
       with:
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
         appName: ${{ env.AZURE_WEBAPP_NAME }}
+    - name: Save publish-profile to file
+      run: ${{ steps.webapp-dev.outputs.profile }} > ${{ env.AZURE_WEBAPP_NAME }}.PublishSettings 
+    - name: Save publish-profile
+      uses: actions/upload-artifact@v1
+      with:
+        name: publishSettings
+        path: ${{ env.AZURE_WEBAPP_NAME }}.PublishSettings 
+
     #Get ACR Credentials
     - name: Get ACR Admin
       run: echo "ACR_PASS=$(az acr credential show --name orangeacr00 --query passwords[0].value --output tsv)" >> $GITHUB_ENV
@@ -78,10 +86,14 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+    - name: Load publish-profile
+      uses: actions/download-artifact@v1
+      with:
+        name: publishSettings
     - uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ steps.webapp-dev.outputs.profile }}
+        publish-profile: ${{ secrets.AZURE_WEBAPP_NAME }}.PublishSettings
         images: 'orangeacr00.azurecr.io/img-orangev0'
   
   # test:
