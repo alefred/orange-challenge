@@ -93,7 +93,7 @@ jobs:
     - uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.AZURE_WEBAPP_NAME }}.PublishSettings
+        publish-profile: ${{ env.AZURE_WEBAPP_NAME }}.PublishSettings 
         images: 'orangeacr00.azurecr.io/img-orangev0'
   
   # test:
