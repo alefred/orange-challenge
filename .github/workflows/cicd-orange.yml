@@ -23,6 +23,15 @@ jobs:
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    # Deploy ARM template
+    - name: Clean up Resource Group
+      uses: azure/arm-deploy@v1
+      with:
+        #subscriptionId: ${{ env.AZURE_SUSBCRIPTIONID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
+        template: ./arm-template/iac-cleanup.json
+        parameters: force
 
      # Deploy ARM template
     - name: Run ARM deploy
@@ -74,11 +83,11 @@ jobs:
     runs-on: ubuntu-latest
     #Get Publishing profile
     steps:
-    - name: Load publish-profile
+    - name: Load publishing-file
       uses: actions/download-artifact@v1
       with:
         name: publishfile
-    - name: publishfile to variable
+    - name: publishing-file to variable
       run: echo "PUB_PROF=$(cat publishfile/orange-webapp.PublishSettings)" >> $GITHUB_ENV
     #Deploy WebApp
     - uses: azure/webapps-deploy@v2
