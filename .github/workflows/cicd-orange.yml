@@ -31,7 +31,6 @@ jobs:
         #subscriptionId: ${{ env.AZURE_SUSBCRIPTIONID }}
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
         template: ./arm-template/iac-cleanup.json
-        parameters: force
 
      # Deploy ARM template
     - name: Run ARM deploy
