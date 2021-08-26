@@ -92,12 +92,12 @@ jobs:
         name: publishfile
     #TODO: DELETE THIS LINES
     - name: TEST LINES
-      run: cat publishfile/orange-webapp.PublishSettings 
+      run: echo "PUB_PROF=$(cat publishfile/orange-webapp.PublishSettings)" >> $GITHUB_ENV
     ##
     - uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: publishfile/orange-webapp.PublishSettings 
+        publish-profile: ${{ env.PUB_PROF }}
         images: 'orangeacr00.azurecr.io/img-orangev0'
   
   # test:
