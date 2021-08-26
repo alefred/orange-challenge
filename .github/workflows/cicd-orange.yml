@@ -62,9 +62,7 @@ jobs:
     - name: Get ACR Admin
       run: echo "ACR_PASS=$(az acr credential show --name orangeacr00 --query passwords[0].value --output tsv)" >> $GITHUB_ENV
       id: get-acradmin
-    #TODO: DELETE
-    - name: PRINT ACR Admin
-      run: echo ${{ env.ACR_PASS }}
+
     #Build image to ACR
     - uses: azure/docker-login@v1
       with:
@@ -75,16 +73,16 @@ jobs:
         docker build -t orangeacr00.azurecr.io/img-orangev0 .
         docker push orangeacr00.azurecr.io/img-orangev0
   
-  # deploy:
-  #   name: deploy
-  #   needs: build
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: azure/webapps-deploy@v2
-  #     with:
-  #       app-name: ${{ env.AZURE_WEBAPP_NAME }}
-  #       publish-profile: ${{ steps.webapp-dev.outputs.profile }}
-  #       images: 'orangeacr00.azurecr.io/img-orangev0'
+  deploy:
+    name: deploy
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        publish-profile: ${{ steps.webapp-dev.outputs.profile }}
+        images: 'orangeacr00.azurecr.io/img-orangev0'
   
   # test:
   #   name: test
