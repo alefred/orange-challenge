@@ -63,7 +63,7 @@ jobs:
     - name: Save publish-profile
       uses: actions/upload-artifact@v1
       with:
-        name: publishSettings
+        name: publishfile
         path: ${{ env.AZURE_WEBAPP_NAME }}.PublishSettings 
 
     #Get ACR Credentials
@@ -89,7 +89,7 @@ jobs:
     - name: Load publish-profile
       uses: actions/download-artifact@v1
       with:
-        name: publishSettings
+        name: publishfile
     #TODO: DELETE THIS LINES
     - name: TEST LINES
       run: echo ${{ env.AZURE_WEBAPP_NAME }}.PublishSettings 
@@ -97,7 +97,7 @@ jobs:
     - uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ env.AZURE_WEBAPP_NAME }}.PublishSettings 
+        publish-profile: publishfile/${{ env.AZURE_WEBAPP_NAME }}.PublishSettings 
         images: 'orangeacr00.azurecr.io/img-orangev0'
   
   # test:
