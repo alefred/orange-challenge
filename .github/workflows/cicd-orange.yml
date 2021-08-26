@@ -39,7 +39,7 @@ jobs:
 
   build:
     name: build
-    needs: iac
+    #needs: iac
     runs-on: ubuntu-latest
 
     steps:
