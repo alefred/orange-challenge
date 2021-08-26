@@ -33,14 +33,14 @@ jobs:
     #     resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
     #     template: ./arm-template/iac-cleanup.json
 
-     # Deploy ARM template
-    - name: Run ARM deploy
-      uses: azure/arm-deploy@v1
-      with:
-        #subscriptionId: ${{ env.AZURE_SUSBCRIPTIONID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
-        template: ./arm-template/iac-orange.json
-        parameters: webAppName=${{ secrets.AZURE_APP_NAME }}
+    #  # Deploy ARM template
+    # - name: Run ARM deploy
+    #   uses: azure/arm-deploy@v1
+    #   with:
+    #     #subscriptionId: ${{ env.AZURE_SUSBCRIPTIONID }}
+    #     resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
+    #     template: ./arm-template/iac-orange.json
+    #     parameters: webAppName=${{ secrets.AZURE_APP_NAME }}
 
   build:
     name: build
@@ -64,7 +64,7 @@ jobs:
 
     #Get ACR Credentials
     - name: Get ACR Admin
-      run: echo "ACR_PASS=$(az acr credential show --name ${{ env.AZURE_ACR_NAME }} --query passwords[0].value --output tsv)" >> $GITHUB_ENV
+      run: echo "ACR_PASS=$(az acr credential show --name $AZURE_ACR_NAME --query passwords[0].value --output tsv)" >> $GITHUB_ENV
       id: get-acradmin
 
     #Build image to ACR
