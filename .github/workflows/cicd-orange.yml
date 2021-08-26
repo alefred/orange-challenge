@@ -10,8 +10,8 @@ on:
 
 env:
   AZURE_RESOURCE_GROUP: orange_rg   # set this to your target resource group
-  AZURE_WEBAPP_NAME: orangeApp # ${{ env.AZURE_WEBAPP_NAME }} 
-  AZURE_ACR_NAME: orangeAppAcr # net to finish in "Acr"
+  AZURE_WEBAPP_NAME: orangeChallenge # ${{ env.AZURE_WEBAPP_NAME }} (2)
+  AZURE_ACR_NAME: orangeChallengeAcr # net to finish in "Acr" (1)
 
 jobs:
   iac:
@@ -63,7 +63,7 @@ jobs:
 
     #TODO: Get ACR Credentials
     - name: Get ACR Admin
-      run: echo "ACR_PASS=$(az acr credential show --name orangeAppAcr --query passwords[0].value --output tsv)" >> $GITHUB_ENV
+      run: echo "ACR_PASS=$(az acr credential show --name orangeChallengeAcr --query passwords[0].value --output tsv)" >> $GITHUB_ENV
 
     #Build image to ACR
     - uses: azure/docker-login@v1
@@ -86,7 +86,7 @@ jobs:
       with:
         name: publishfile
     - name: publishing-file to variable
-      run: echo "PUB_PROF=$(cat publishfile/orangeApp.PublishSettings)" >> $GITHUB_ENV
+      run: echo "PUB_PROF=$(cat publishfile/orangeChallenge.PublishSettings)" >> $GITHUB_ENV
     #Deploy WebApp
     - uses: azure/webapps-deploy@v2
       with:
