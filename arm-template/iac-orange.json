@@ -11,11 +11,13 @@
     "functions": [],
     "variables": {
         "servicePlanName": "[concat(parameters('webAppName'), '-ServicePlan')]",
-        "orangeAcr00Id": "[resourceId('Microsoft.ContainerRegistry/registries', 'orangeAcr00')]"
+        "acrName": "[concat(parameters('webAppName'), '-acr')]",
+        "acrId": "[resourceId('Microsoft.ContainerRegistry/registries', variables('acrName'))]",
+        "acrUrl": "[concat('https://', variables('acrName'), '.azurecr.io')]"
     },
     "resources": [
         {
-            "name": "orangeAcr00",
+            "name": "[variables('acrName')]",
             "type": "Microsoft.ContainerRegistry/registries",
             "apiVersion": "2020-11-01-preview",
             "location": "East US 2",
@@ -64,7 +66,7 @@
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', variables('servicePlanName'))]",
-                "[resourceId('Microsoft.ContainerRegistry/registries', 'orangeAcr00')]"
+                "[resourceId('Microsoft.ContainerRegistry/registries', variables('acrName'))]"
             ],
             "properties": {                
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('servicePlanName'))]",
@@ -77,15 +79,15 @@
                         },
                         {
                             "name": "DOCKER_REGISTRY_SERVER_URL",
-                            "value": "https://orangeAcr00.azurecr.io"
+                            "value": "[variables('acrUrl')]"
                         },
                         {
                             "name": "DOCKER_REGISTRY_SERVER_USERNAME",
-                            "value": "orangeAcr00"
+                            "value": "[variables('acrName')]"
                         },
                         {
                             "name": "DOCKER_REGISTRY_SERVER_PASSWORD",
-                            "value": "[listCredentials(variables('orangeAcr00Id'),'2020-11-01-preview').passwords[0].value]"
+                            "value": "[listCredentials(variables('acrId'),'2020-11-01-preview').passwords[0].value]"
                         }
                     ]
                 }

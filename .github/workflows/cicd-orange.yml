@@ -10,7 +10,8 @@ on:
 
 env:
   AZURE_RESOURCE_GROUP: orange_rg   # set this to your target resource group
-  AZURE_WEBAPP_NAME: orange-webapp # set this to your target web app
+  AZURE_ACR_NAME: '${{ secrets.AZURE_APP_NAME }}-acr'        # set this to your target ACR name ${{ env.AZURE_ACR_NAME }}
+  #AZURE_WEBAPP_NAME: orange-webapp # set this to your target web app  ${{ secrets.AZURE_APP_NAME }} -acr
 
 jobs:
   iac:
@@ -39,7 +40,7 @@ jobs:
         #subscriptionId: ${{ env.AZURE_SUSBCRIPTIONID }}
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
         template: ./arm-template/iac-orange.json
-        parameters: webAppName=${{ env.AZURE_WEBAPP_NAME }}
+        parameters: webAppName=${{ secrets.AZURE_APP_NAME }}
 
   build:
     name: build
@@ -54,27 +55,27 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     - name: publish-profile to file
-      run: az webapp deployment list-publishing-profiles -g orange_rg  -n orange-webapp  --xml >> ${{ env.AZURE_WEBAPP_NAME }}.PublishSettings 
+      run: az webapp deployment list-publishing-profiles -g orange_rg  -n orange-webapp  --xml >> ${{ secrets.AZURE_APP_NAME }}.PublishSettings 
     - name: Save publish-profile
       uses: actions/upload-artifact@v1
       with:
         name: publishfile
-        path: ${{ env.AZURE_WEBAPP_NAME }}.PublishSettings 
+        path: ${{ secrets.AZURE_APP_NAME }}.PublishSettings 
 
     #Get ACR Credentials
     - name: Get ACR Admin
-      run: echo "ACR_PASS=$(az acr credential show --name orangeacr00 --query passwords[0].value --output tsv)" >> $GITHUB_ENV
+      run: echo "ACR_PASS=$(az acr credential show --name ${{ env.AZURE_ACR_NAME }} --query passwords[0].value --output tsv)" >> $GITHUB_ENV
       id: get-acradmin
 
     #Build image to ACR
     - uses: azure/docker-login@v1
       with:
-        login-server: orangeacr00.azurecr.io
-        username: orangeAcr00
+        login-server: ${{ env.AZURE_ACR_NAME }}.azurecr.io
+        username: ${{ env.AZURE_ACR_NAME }}
         password: ${{ env.ACR_PASS }}
     - run: |
-        docker build -t orangeacr00.azurecr.io/img-orangev0 .
-        docker push orangeacr00.azurecr.io/img-orangev0
+        docker build -t ${{ env.AZURE_ACR_NAME }}.azurecr.io/img-orangev0 .
+        docker push ${{ env.AZURE_ACR_NAME }}.azurecr.io/img-orangev0
   
   deploy:
     name: deploy
@@ -91,9 +92,9 @@ jobs:
     #Deploy WebApp
     - uses: azure/webapps-deploy@v2
       with:
-        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        app-name: ${{ secrets.AZURE_APP_NAME }}
         publish-profile: ${{ env.PUB_PROF }}
-        images: 'orangeacr00.azurecr.io/img-orangev0'
+        images: '${{ env.AZURE_ACR_NAME }}.azurecr.io/img-orangev0'
   
   # test:
   #   name: test
