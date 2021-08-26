@@ -14,19 +14,19 @@ env:
   #AZURE_SUBSCRIPTIONID: f3c3a373-0239-4818-bf69-367b5ce29218 #
 
 jobs:
-  iac:
-    name: iac
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@main
-    #Login to Azure
-    - name: Log in with Azure
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-    #TODO: DELETE THIS LINES
-    - name: Get ACR Admin
-      run: az acr credential show --name orangeacr00 --query passwords[0].value --output tsv
+  # iac:
+  #   name: iac
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@main
+  #   #Login to Azure
+  #   - name: Log in with Azure
+  #     uses: azure/login@v1
+  #     with:
+  #       creds: ${{ secrets.AZURE_CREDENTIALS }}
+  #   #TODO: DELETE THIS LINES
+  #   - name: Get ACR Admin
+  #     run: az acr credential show --name orangeacr00 --query passwords[0].value --output tsv
 
     #  # Deploy ARM template
     # - name: Run ARM deploy
@@ -90,6 +90,10 @@ jobs:
       uses: actions/download-artifact@v1
       with:
         name: publishSettings
+    #TODO: DELETE THIS LINES
+    - name: TEST LINES
+      run: echo ${{ env.AZURE_WEBAPP_NAME }}.PublishSettings 
+    ##
     - uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
