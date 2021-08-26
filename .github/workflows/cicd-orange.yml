@@ -71,15 +71,15 @@ jobs:
       run: echo "ACR_PASS=$(az acr credential show --name orangeacr00 --query passwords[0].value --output tsv)" >> $GITHUB_ENV
       id: get-acradmin
 
-    #Build image to ACR
-    - uses: azure/docker-login@v1
-      with:
-        login-server: orangeacr00.azurecr.io
-        username: orangeAcr00
-        password: ${{ env.ACR_PASS }}
-    - run: |
-        docker build -t orangeacr00.azurecr.io/img-orangev0 .
-        docker push orangeacr00.azurecr.io/img-orangev0
+    # #Build image to ACR
+    # - uses: azure/docker-login@v1
+    #   with:
+    #     login-server: orangeacr00.azurecr.io
+    #     username: orangeAcr00
+    #     password: ${{ env.ACR_PASS }}
+    # - run: |
+    #     docker build -t orangeacr00.azurecr.io/img-orangev0 .
+    #     docker push orangeacr00.azurecr.io/img-orangev0
   
   deploy:
     name: deploy
@@ -92,12 +92,12 @@ jobs:
         name: publishfile
     #TODO: DELETE THIS LINES
     - name: TEST LINES
-      run: echo publishfile/${{ env.AZURE_WEBAPP_NAME }}.PublishSettings 
+      run: cat publishfile/orange-webapp.PublishSettings 
     ##
     - uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: publishfile/${{ env.AZURE_WEBAPP_NAME }}.PublishSettings 
+        publish-profile: publishfile/orange-webapp.PublishSettings 
         images: 'orangeacr00.azurecr.io/img-orangev0'
   
   # test:
