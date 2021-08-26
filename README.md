@@ -1,3 +1,5 @@
+[![cicd-orange](https://github.com/alefred/orange-challenge/actions/workflows/cicd-orange.yml/badge.svg)](https://github.com/alefred/orange-challenge/actions/workflows/cicd-orange.yml)
+
 # react-and-spring-data-rest
 
 The application has a react frontend and a Spring Boot Rest API, packaged as a single module Maven application.

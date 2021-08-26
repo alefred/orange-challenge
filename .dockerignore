@@ -1,4 +1,5 @@
 alefred_notes
-./github
-./arm-template
-./support-files
+.github
+/arm-template
+/support-files
+/test-files
