@@ -99,13 +99,19 @@ jobs:
     #needs: deploy
     runs-on: ubuntu-latest
     steps:
-    - name: Selenium 1
-      run: sudo apt install python-pip
-    - name: Selenium 2
-      run: sudo apt-get install chromium-chromedriver
-    - uses: actions/checkout@master
-    - name: Test
-      uses: skx/github-action-tester@master
+    - name: checkout repo content
+      uses: actions/checkout@v2 # checkout the repository content to github runner.
+    - name: setup python
+      uses: actions/setup-python@v2
       with:
-        script:  python ./test-files/login.py
+        python-version: 3.8 #install the python needed
+    - name: execute py script # run the run.py to get the latest data
+      run: |
+        python ./test-files/login.py
+
+    # - uses: actions/checkout@master
+    # - name: Test
+    #   uses: skx/github-action-tester@master
+    #   with:
+    #     script:  python ./test-files/login.py
 
