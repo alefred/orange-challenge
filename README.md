@@ -152,7 +152,7 @@ Browse the app: [oczoom.azurewebsites.net](http://oczoom.azurewebsites.net/login
 Execute the next list of commands in Azure Cli
 
 ```
-$appSpName="oczoom-spApp
+$appSpName="oczoom-spApp"
 $rgName="oczoom_rg"
 $subscriptionId = az account show --query id --output tsv
 az group delete --resource-group $rgName --yes
