@@ -17,4 +17,6 @@ password_textbox.send_keys("turnquist")
 login_button = driver.find_element_by_class_name("btn btn-lg btn-primary btn-block")
 login_button.submit()
 
+print("Login successful" + driver.current_url)
+
 driver.close()
