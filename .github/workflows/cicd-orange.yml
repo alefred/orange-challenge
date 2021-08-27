@@ -95,31 +95,12 @@ jobs:
         images: '${{ env.AZURE_ACR_NAME }}.azurecr.io/img-orangev0'
   
   test:
-    name: test
-    needs: deploy
+    name: Run tests
     runs-on: ubuntu-latest
-    container:
-      image: node:14.4
-      options: --network-alias testHost
-    env:
-      NODE_ENV: test
-      SELENIUM_HUB_HOST: hub
-      TEST_HOST: $AZURE_WEBAPP_NAME.azurewebsites.net
-    services:
-      hub:
-        image: selenium/hub:3.141.59-gold
-      firefox:
-        image: selenium/node-firefox:3.141.59-gold
-        env:
-          HUB_HOST: hub
-          HUB_PORT: 4444
     steps:
-      - name: Checkout
-        uses: actions/checkout@v1.2.0
-      - name: Install
-        run: yarn
-      - name: Lint
-        run: yarn lint
-      - name: Test
-        run: yarn test
+    - uses: actions/checkout@master
+    - name: Test
+      uses: skx/github-action-tester@master
+      with:
+        script: ./test-files/login.py
 
