@@ -14,93 +14,98 @@ env:
   AZURE_ACR_NAME: orangeChallengeAcr # net to finish in "Acr" (1)
 
 jobs:
-  iac:
-    name: iac
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@main
-    #Login to Azure
-    - name: Log in with Azure
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+  # iac:
+  #   name: iac
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@main
+  #   #Login to Azure
+  #   - name: Log in with Azure
+  #     uses: azure/login@v1
+  #     with:
+  #       creds: ${{ secrets.AZURE_CREDENTIALS }}
     
-    # TODO: test mode incremental arm
-    - name: Clean up Resource Group
-      uses: azure/arm-deploy@v1
-      with:
-        deploymentMode: Complete
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
-        template: ./arm-template/iac-cleanup.json
+  #   # TODO: test mode incremental arm
+  #   - name: Clean up Resource Group
+  #     uses: azure/arm-deploy@v1
+  #     with:
+  #       deploymentMode: Complete
+  #       resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
+  #       template: ./arm-template/iac-cleanup.json
 
-     # Deploy ARM template
-    - name: Run ARM deploy
-      uses: azure/arm-deploy@v1
-      with:
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
-        template: ./arm-template/iac-orange.json
-        parameters: webAppName=${{ env.AZURE_WEBAPP_NAME }} 
+  #    # Deploy ARM template
+  #   - name: Run ARM deploy
+  #     uses: azure/arm-deploy@v1
+  #     with:
+  #       resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
+  #       template: ./arm-template/iac-orange.json
+  #       parameters: webAppName=${{ env.AZURE_WEBAPP_NAME }} 
 
-  build:
-    name: build
-    needs: iac
-    runs-on: ubuntu-latest
+  # build:
+  #   name: build
+  #   needs: iac
+  #   runs-on: ubuntu-latest
 
-    steps:
-    - uses: actions/checkout@main
-    #**Login to Azure
-    - name: Log in with Azure
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-    - name: publish-profile to file
-      run: az webapp deployment list-publishing-profiles -g orange_rg  -n ${{ env.AZURE_WEBAPP_NAME }}  --xml >> ${{ env.AZURE_WEBAPP_NAME }}.PublishSettings 
-    - name: Save publish-profile
-      uses: actions/upload-artifact@v1
-      with:
-        name: publishfile
-        path: ${{ env.AZURE_WEBAPP_NAME }}.PublishSettings 
+  #   steps:
+  #   - uses: actions/checkout@main
+  #   #**Login to Azure
+  #   - name: Log in with Azure
+  #     uses: azure/login@v1
+  #     with:
+  #       creds: ${{ secrets.AZURE_CREDENTIALS }}
+  #   - name: publish-profile to file
+  #     run: az webapp deployment list-publishing-profiles -g orange_rg  -n ${{ env.AZURE_WEBAPP_NAME }}  --xml >> ${{ env.AZURE_WEBAPP_NAME }}.PublishSettings 
+  #   - name: Save publish-profile
+  #     uses: actions/upload-artifact@v1
+  #     with:
+  #       name: publishfile
+  #       path: ${{ env.AZURE_WEBAPP_NAME }}.PublishSettings 
 
-    #TODO: Get ACR Credentials
-    - name: Get ACR Admin
-      run: echo "ACR_PASS=$(az acr credential show --name orangeChallengeAcr --query passwords[0].value --output tsv)" >> $GITHUB_ENV
+  #   #TODO: Get ACR Credentials
+  #   - name: Get ACR Admin
+  #     run: echo "ACR_PASS=$(az acr credential show --name orangeChallengeAcr --query passwords[0].value --output tsv)" >> $GITHUB_ENV
 
-    #Build image to ACR
-    - uses: azure/docker-login@v1
-      with:
-        login-server: ${{ env.AZURE_ACR_NAME }}.azurecr.io
-        username: ${{ env.AZURE_ACR_NAME }}
-        password: ${{ env.ACR_PASS }}
-    - run: |
-        docker build -t ${{ env.AZURE_ACR_NAME }}.azurecr.io/img-orangev0 .
-        docker push ${{ env.AZURE_ACR_NAME }}.azurecr.io/img-orangev0
+  #   #Build image to ACR
+  #   - uses: azure/docker-login@v1
+  #     with:
+  #       login-server: ${{ env.AZURE_ACR_NAME }}.azurecr.io
+  #       username: ${{ env.AZURE_ACR_NAME }}
+  #       password: ${{ env.ACR_PASS }}
+  #   - run: |
+  #       docker build -t ${{ env.AZURE_ACR_NAME }}.azurecr.io/img-orangev0 .
+  #       docker push ${{ env.AZURE_ACR_NAME }}.azurecr.io/img-orangev0
   
-  deploy:
-    name: deploy
-    needs: build
-    runs-on: ubuntu-latest
-    #TODO: Get Publishing profile
-    steps:
-    - name: Load publishing-file
-      uses: actions/download-artifact@v1
-      with:
-        name: publishfile
-    - name: publishing-file to variable
-      run: echo "PUB_PROF=$(cat publishfile/orangeChallenge.PublishSettings)" >> $GITHUB_ENV
-    #Deploy WebApp
-    - uses: azure/webapps-deploy@v2
-      with:
-        app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ env.PUB_PROF }}
-        images: '${{ env.AZURE_ACR_NAME }}.azurecr.io/img-orangev0'
+  # deploy:
+  #   name: deploy
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   #TODO: Get Publishing profile
+  #   steps:
+  #   - name: Load publishing-file
+  #     uses: actions/download-artifact@v1
+  #     with:
+  #       name: publishfile
+  #   - name: publishing-file to variable
+  #     run: echo "PUB_PROF=$(cat publishfile/orangeChallenge.PublishSettings)" >> $GITHUB_ENV
+  #   #Deploy WebApp
+  #   - uses: azure/webapps-deploy@v2
+  #     with:
+  #       app-name: ${{ env.AZURE_WEBAPP_NAME }}
+  #       publish-profile: ${{ env.PUB_PROF }}
+  #       images: '${{ env.AZURE_ACR_NAME }}.azurecr.io/img-orangev0'
   
   test:
     name: Run tests
+    #needs: deploy
     runs-on: ubuntu-latest
     steps:
+    - name: Selenium 1
+      run: sudo apt install python-pip
+    - name: Selenium 2
+      run: sudo apt-get install chromium-chromedriver
     - uses: actions/checkout@master
     - name: Test
       uses: skx/github-action-tester@master
       with:
-        script: ./test-files/login.py
+        script:  python ./test-files/login.py
 
