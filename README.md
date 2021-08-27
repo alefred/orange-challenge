@@ -115,7 +115,7 @@ az login --use-device-code
 ```
 Execute next command in your az cli in order to copy the output:
 ```
-$appSpName="oczoom-spApp
+$appSpName="oczoom-spApp"
 $rgName="oczoom_rg"
 $subscriptionId = az account show --query id --output tsv
 az group create --resource-group $rgName --location "East US 2"
