@@ -88,7 +88,8 @@ jobs:
     - name: publishing-file to variable
       run: echo "PUB_PROF=$(cat publishfile/orangeChallenge.PublishSettings)" >> $GITHUB_ENV
     #Deploy WebApp
-    - uses: azure/webapps-deploy@v2
+    - name: Deploy web app to azure webapp for containers
+      uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         publish-profile: ${{ env.PUB_PROF }}
@@ -100,15 +101,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/setup-python@v1
-    - uses: lyricwulf/abc@v1
+    - name: Install Python
+      uses: actions/setup-python@v1
+    - name: Install package chromium
+      uses: lyricwulf/abc@v1
       with:
         linux: chromium-chromedriver
-    - uses: BSFishy/pip-action@v1
+    - name: Install pip selenium
+      uses: BSFishy/pip-action@v1
       with:
         packages: |
           selenium
-    - run: python ./test-files/login.py
+    - name: Login to the web page
+      run: python ./test-files/login.py
 
 
 
