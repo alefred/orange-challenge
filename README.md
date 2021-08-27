@@ -31,7 +31,7 @@
   - [Prepare connection with Azure](#prepare-connection-with-azure)
   - [CI/CD](#cicd)
   - [Clean Up Infrastructure](#clean-up-infrastructure)
-- [🎉 Acknowledgments <a name = "acknowledgments"></a>](#-acknowledgments-)
+- [🎉 Deliverables <a name = "acknowledgments"></a>](#-deliverables-)
 
 ## 🧐 Requirements <a name = "Requirements"></a>
 
@@ -64,7 +64,21 @@ pipeline
   - Container Registry: Azure container Registry
   - Container : Azure WebApp for containers
   - Monitoring Tool:  Azure App Insight
-  - Infrastrcuture as code : Azure ARM templates
+  - Infrastructure as code : Azure ARM templates
+
+The application has been deployed in Azure, the pipeline process is explaining below:
+
+ 1. First create the resource group whom will store the resources deployed
+ 2. After that create a service principal a give the permission only over the resource group created
+ 3. Deploy the resources with the arm template 
+   
+    - Azure container Registry
+    - Azure WebApp for containers
+    - Azure Service plan
+    - Azure App Insight
+ 4. Build a docker image and upload to Azure container registry
+ 5. Deploy the container image to the webapp 
+ 6. Test access to the web application deployed with a python script and chrome driver (Selenium)
 
 ## ⛓️ Dependencies / Limitations <a name = "limitations"></a>
 
@@ -73,7 +87,7 @@ This version v1 have a below limitations:
 - Static Application's Name beetween different environments
 - Start the deployment infrastructure require execute command in azure CLI 
 - The unit-test enviroment is setted just in a Linux environment
-- It's necessary cleanup the insfrastructure before deploy in different environment
+- ⛏️ **It's necessary cleanup the insfrastructure before deploy in different environment (Azure Subscription)**
 
 ## 🚀 Future Scope <a name = "future_scope"></a>
 
@@ -124,12 +138,14 @@ The output could be similar to:
 }
 
 ```
-Copy the output as a new secret in github repo forked as the image show:
+Copy the output and paste as a new secret "AZURE_CREDENTIALS" in github repo forked as the image show:
 ![picture alt](https://chi01pap002files.storage.live.com/y4mlQu23SCpALUKVmBx1UmaMagS-gWh9Rgq-zxySMOYexJ3XKcoJrF2c6MZ0JS2kDoWJZLoQe1Q3coI_GWBVBp9JrTpQBA3ELlAzqhmJHjbqPi_F4w2RD2iL2ISpm2KGtO0oskDImOb1KeZ3zcDpdvWMKcBW4X7uDBqHUt0x5fEvwpv_LtceI7eEi7YkSxQK0Zs?width=1352&height=739&cropmode=none "Title is optional")
 
 ### CI/CD
 Push a change to the main branch and go to GitHub Action to see the process
 ![picture alt](https://chi01pap002files.storage.live.com/y4mSCH-CpKWJ20RifjiSwuCfmrSMGRZObG7gs33Fn4FxmAknlR_zkpnReaAUbFWfxeSbJrSd-sWEIyzOjc4LwLs3VIRXLEFo8PpofCceWtWGCzrfIR9Z4LmNeYkIPOHqSW44c8Hk0gZlV0WAWiJ5nxRoPeXQwK03FY-TGh25G3i4jaSEHvbU4RZaKdeSDFoR9wc?width=1909&height=755&cropmode=none "Title is optional")
+
+Browse the app: [orangechallenge.azurewebsites.net](http://orangechallenge.azurewebsites.net/login)
 
 ### Clean Up Infrastructure
 
@@ -144,7 +160,22 @@ az ad sp delete --id (az ad sp list --display-name $appSpName --query "[].appId"
 ```
 
 
-## 🎉 Acknowledgments <a name = "acknowledgments"></a>
+## 🎉 Deliverables <a name = "acknowledgments"></a>
 
-- url app: orangechallenge.azurewebsites.net
+- Source code of the pipeline(s) and the IaC source code of the solution implemented:
+
+  - Pipeline(s) code: .github\workflow\cicd-orange.yml
+  - Iac code: arm-template\iac-orange.json
+- Instructions on how to fork, configure and deploy the solution on our own cloud
+environment
+  - https://github.com/alefred/orange-challenge
+  
+    - [🏁 How to use <a name = "getting_started"></a>](#-how-to-use-)
+- High-level documentation explaining the overall architecture of the solution implemented.
+  - https://github.com/alefred/orange-challenge
+    - [⛏️ Solution <a name = "idea"></a>](#️-solution-)
+
+
+
+*Url app after deploy: orangechallenge.azurewebsites.net*
   
