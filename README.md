@@ -22,103 +22,129 @@
 ## 📝 Table of Contents
 
 - [📝 Table of Contents](#-table-of-contents)
-- [🧐 Problem Statement <a name = "problem_statement"></a>](#-problem-statement-)
-- [💡 Idea / Solution <a name = "idea"></a>](#-idea--solution-)
+- [🧐 Requirements <a name = "Requirements"></a>](#-requirements-)
+- [⛏️ Solution <a name = "idea"></a>](#️-solution-)
 - [⛓️ Dependencies / Limitations <a name = "limitations"></a>](#️-dependencies--limitations-)
 - [🚀 Future Scope <a name = "future_scope"></a>](#-future-scope-)
-- [🏁 Getting Started <a name = "getting_started"></a>](#-getting-started-)
-  - [Prerequisites](#prerequisites)
-  - [Installing](#installing)
-- [🎈 Usage <a name="usage"></a>](#-usage-)
-- [⛏️ Built With <a name = "tech_stack"></a>](#️-built-with-)
-- [✍️ Authors <a name = "authors"></a>](#️-authors-)
+- [🏁 How to use <a name = "getting_started"></a>](#-how-to-use-)
+  - [Fork the project](#fork-the-project)
+  - [Prepare connection with Azure](#prepare-connection-with-azure)
+  - [CI/CD](#cicd)
+  - [Clean Up Infrastructure](#clean-up-infrastructure)
 - [🎉 Acknowledgments <a name = "acknowledgments"></a>](#-acknowledgments-)
 
-## 🧐 Problem Statement <a name = "problem_statement"></a>
+## 🧐 Requirements <a name = "Requirements"></a>
 
-It is useful to design and follow a specific format when writing a problem statement. While there are several options
-for doing this, the following is a simple and straightforward template often used in Business Analysis to maintain
-focus on defining the problem.
+The main objective of this project is achive the below requirements:
+- As a DevOps engineer, I want to have a CI/CD pipeline for my application
+The pipeline must build and test the application code base.
+The pipeline must build and push a Docker container ready to use.
+The pipeline must deploy the application across different environments on the target
+infrastructure.
+  - Bonus point: Separate the backend and the frontend in different pipelines and containers.
+- As a DevOps engineer, I want to have a pipeline to deploy the required infrastructure for my application
+The infrastructure must be created on the cloud, for the purpose of the assignment any
+public cloud can be used.
+The deployment pipeline must use infrastructure as code (Cloud Formation, Cloud
+Deployment Manager, Azure Resource Manager or Terraform).
+The delivered infrastructure must be monitored and audited.
+The delivered infrastructure must allow multiple personal accounts.
+For the purpose of the assignment, you will define the cloud architecture that you see fit, document it and explain the resources created and choices made.
+  - Bonus point: The delivered infrastructure must be able to scale automatically.
+  - Bonus point: Modify the application to make use of real database running on the cloud,
+instead of the in-memory database.TIP: We'd highly appreciate if you provide cleanup/destroy functionality as part of the
+pipeline
 
-- IDEAL: This section is used to describe the desired or “to be” state of the process or product. At large, this section
-  should illustrate what the expected environment would look like once the solution is implemented.
-- REALITY: This section is used to describe the current or “as is” state of the process or product.
-- CONSEQUENCES: This section is used to describe the impacts on the business if the problem is not fixed or improved upon.
-  This includes costs associated with loss of money, time, productivity, competitive advantage, and so forth.
+## ⛏️ Solution <a name = "idea"></a>
 
-Following this format will result in a workable document that can be used to understand the problem and elicit
-requirements that will lead to a winning solution.
+  The technologies and tools selecteds to achieve the requeriment are:
 
-## 💡 Idea / Solution <a name = "idea"></a>
-
-This section is used to describe potential solutions.
-
-Once the ideal, reality, and consequences sections have been
-completed, and understood, it becomes easier to provide a solution for solving the problem.
+  - Cloud Provider: Azure
+  - CI/CD tool: Git Hub Action
+  - Container Registry: Azure container Registry
+  - Container : Azure WebApp for containers
+  - Monitoring Tool:  Azure App Insight
+  - Infrastrcuture as code : Azure ARM templates
 
 ## ⛓️ Dependencies / Limitations <a name = "limitations"></a>
 
-- What are the dependencies of your project?
-- Describe each limitation in detailed but concise terms
-- Explain why each limitation exists
-- Provide the reasons why each limitation could not be overcome using the method(s) chosen to acquire.
-- Assess the impact of each limitation in relation to the overall findings and conclusions of your project, and if
-  appropriate, describe how these limitations could point to the need for further research.
+This version v1 have a below limitations:
+
+- Static Application's Name beetween different environments
+- Start the deployment infrastructure require execute command in azure CLI 
+- The unit-test enviroment is setted just in a Linux environment
+- It's necessary cleanup the insfrastructure before deploy in different environment
 
 ## 🚀 Future Scope <a name = "future_scope"></a>
 
-Write about what you could not develop during the course of the Hackathon; and about what your project can achieve
-in the future.
+Next version must have:
 
-## 🏁 Getting Started <a name = "getting_started"></a>
+ - Autoscaling the web app 
+ - Use SQL Azure Database
+ - Separate the backend and the frontend in different pipelines and containers
+
+## 🏁 How to use <a name = "getting_started"></a>
 
 These instructions will get you a copy of the project up and running on your local machine for development
 and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
 
-### Prerequisites
+### Fork the project
+ 1. On GitHub, navigate to the octocat/Spoon-Knife repository.
+ 2. In the top-right corner of the page, click Fork.
+   ![picture alt](https://docs.github.com/assets/images/help/repository/fork_button.jpg "Title is optional")
+Fork button
 
-What things you need to install the software and how to install them.
+### Prepare connection with Azure
+Connect to az cli with:
+```
+az login --use-device-code
+```
+Execute next command in your az cli in order to copy the output:
+```
+$appSpName="orange-spApp"
+$rgName="orange_rg"
+$subscriptionId = az account show --query id --output tsv
+az group create --resource-group $rgName --location "East US 2"
+az ad sp create-for-rbac --name $appSpName --role contributor --scopes "/subscriptions/$subscriptionId/resourceGroups/$rgName" --sdk-auth
 
 ```
-Give examples
+The output could be similar to:
+```
+{
+  "clientId": "-------------------------e8",
+  "clientSecret": "Y93m-------------------------W",
+  "subscriptionId": "f3c-------------------------8",
+  "tenantId": "0c6-------------------------",
+  "activeDirectoryEndpointUrl": "https://login.microsoftonline.com",
+  "resourceManagerEndpointUrl": "https://management.azure.com/",
+  "activeDirectoryGraphResourceId": "https://graph.windows.net/",
+  "sqlManagementEndpointUrl": "https://management.core.windows.net:8443/",
+  "galleryEndpointUrl": "https://gallery.azure.com/",
+  "managementEndpointUrl": "https://management.core.windows.net/"
+}
+
+```
+Copy the output as a new secret in github repo forked as the image show:
+![picture alt](https://chi01pap002files.storage.live.com/y4mlQu23SCpALUKVmBx1UmaMagS-gWh9Rgq-zxySMOYexJ3XKcoJrF2c6MZ0JS2kDoWJZLoQe1Q3coI_GWBVBp9JrTpQBA3ELlAzqhmJHjbqPi_F4w2RD2iL2ISpm2KGtO0oskDImOb1KeZ3zcDpdvWMKcBW4X7uDBqHUt0x5fEvwpv_LtceI7eEi7YkSxQK0Zs?width=1352&height=739&cropmode=none "Title is optional")
+
+### CI/CD
+Push a change to the main branch and go to GitHub Action to see the process
+![picture alt](https://chi01pap002files.storage.live.com/y4mSCH-CpKWJ20RifjiSwuCfmrSMGRZObG7gs33Fn4FxmAknlR_zkpnReaAUbFWfxeSbJrSd-sWEIyzOjc4LwLs3VIRXLEFo8PpofCceWtWGCzrfIR9Z4LmNeYkIPOHqSW44c8Hk0gZlV0WAWiJ5nxRoPeXQwK03FY-TGh25G3i4jaSEHvbU4RZaKdeSDFoR9wc?width=1909&height=755&cropmode=none "Title is optional")
+
+### Clean Up Infrastructure
+
+Execute the next list of commands in Azure Cli
+
+```
+$appSpName="orange-spApp"
+$rgName="orange_rg"
+$subscriptionId = az account show --query id --output tsv
+az group delete --resource-group $rgName --yes
+az ad sp delete --id (az ad sp list --display-name $appSpName --query "[].appId" --output tsv)
 ```
 
-### Installing
-
-A step by step series of examples that tell you how to get a development env running.
-
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-## 🎈 Usage <a name="usage"></a>
-
-Add notes about how to use the system.
-
-## ⛏️ Built With <a name = "tech_stack"></a>
-
-- [MongoDB](https://www.mongodb.com/) - Database
-- [Express](https://expressjs.com/) - Server Framework
-- [VueJs](https://vuejs.org/) - Web Framework
-- [NodeJs](https://nodejs.org/en/) - Server Environment
-
-## ✍️ Authors <a name = "authors"></a>
-
-- [@kylelobo](https://github.com/kylelobo) - Idea & Initial work
-
-See also the list of [contributors](https://github.com/kylelobo/The-Documentation-Compendium/contributors)
-who participated in this project.
 
 ## 🎉 Acknowledgments <a name = "acknowledgments"></a>
 
-- Hat tip to anyone whose code was used
-- Inspiration
-- References
+- url app: orangechallenge.azurewebsites.net
+  
