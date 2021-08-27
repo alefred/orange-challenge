@@ -9,9 +9,9 @@ on:
       - main
 
 env:
-  AZURE_RESOURCE_GROUP: orange_rg   # set this to your target resource group
-  AZURE_WEBAPP_NAME: orangeChallenge # ${{ env.AZURE_WEBAPP_NAME }} (2)
-  AZURE_ACR_NAME: orangeChallengeAcr # net to finish in "Acr" (1)
+  AZURE_RESOURCE_GROUP: oczoom_rg   # set this to your target resource group
+  AZURE_WEBAPP_NAME: oczoom # ${{ env.AZURE_WEBAPP_NAME }} (2)
+  AZURE_ACR_NAME: oczoomAcr # net to finish in "Acr" (1)
 
 jobs:
   iac:
@@ -54,7 +54,7 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     - name: publish-profile to file
-      run: az webapp deployment list-publishing-profiles -g orange_rg  -n ${{ env.AZURE_WEBAPP_NAME }}  --xml >> ${{ env.AZURE_WEBAPP_NAME }}.PublishSettings 
+      run: az webapp deployment list-publishing-profiles -g oczoom_rg  -n ${{ env.AZURE_WEBAPP_NAME }}  --xml >> ${{ env.AZURE_WEBAPP_NAME }}.PublishSettings 
     - name: Save publish-profile
       uses: actions/upload-artifact@v1
       with:
@@ -63,7 +63,7 @@ jobs:
 
     #TODO: Get ACR Credentials
     - name: Get ACR Admin
-      run: echo "ACR_PASS=$(az acr credential show --name orangeChallengeAcr --query passwords[0].value --output tsv)" >> $GITHUB_ENV
+      run: echo "ACR_PASS=$(az acr credential show --name oczoomAcr --query passwords[0].value --output tsv)" >> $GITHUB_ENV
 
     #Build image to ACR
     - uses: azure/docker-login@v1
@@ -86,7 +86,7 @@ jobs:
       with:
         name: publishfile
     - name: publishing-file to variable
-      run: echo "PUB_PROF=$(cat publishfile/orangeChallenge.PublishSettings)" >> $GITHUB_ENV
+      run: echo "PUB_PROF=$(cat publishfile/oczoom.PublishSettings)" >> $GITHUB_ENV
     #Deploy WebApp
     - name: Deploy web app to azure webapp for containers
       uses: azure/webapps-deploy@v2

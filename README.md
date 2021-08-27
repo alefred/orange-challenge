@@ -115,8 +115,8 @@ az login --use-device-code
 ```
 Execute next command in your az cli in order to copy the output:
 ```
-$appSpName="orange-spApp"
-$rgName="orange_rg"
+$appSpName="oczoom-spApp
+$rgName="oczoom_rg"
 $subscriptionId = az account show --query id --output tsv
 az group create --resource-group $rgName --location "East US 2"
 az ad sp create-for-rbac --name $appSpName --role contributor --scopes "/subscriptions/$subscriptionId/resourceGroups/$rgName" --sdk-auth
@@ -145,15 +145,15 @@ Copy the output and paste as a new secret "AZURE_CREDENTIALS" in github repo for
 Push a change to the main branch and go to GitHub Action to see the process
 ![picture alt](https://chi01pap002files.storage.live.com/y4mSCH-CpKWJ20RifjiSwuCfmrSMGRZObG7gs33Fn4FxmAknlR_zkpnReaAUbFWfxeSbJrSd-sWEIyzOjc4LwLs3VIRXLEFo8PpofCceWtWGCzrfIR9Z4LmNeYkIPOHqSW44c8Hk0gZlV0WAWiJ5nxRoPeXQwK03FY-TGh25G3i4jaSEHvbU4RZaKdeSDFoR9wc?width=1909&height=755&cropmode=none "Title is optional")
 
-Browse the app: [orangechallenge.azurewebsites.net](http://orangechallenge.azurewebsites.net/login)
+Browse the app: [oczoom.azurewebsites.net](http://oczoom.azurewebsites.net/login)
 
 ### Clean Up Infrastructure
 
 Execute the next list of commands in Azure Cli
 
 ```
-$appSpName="orange-spApp"
-$rgName="orange_rg"
+$appSpName="oczoom-spApp
+$rgName="oczoom_rg"
 $subscriptionId = az account show --query id --output tsv
 az group delete --resource-group $rgName --yes
 az ad sp delete --id (az ad sp list --display-name $appSpName --query "[].appId" --output tsv)
@@ -177,5 +177,5 @@ environment
 
 
 
-*Url app after deploy: orangechallenge.azurewebsites.net*
+*Url app after deploy: oczoom.azurewebsites.net*
   

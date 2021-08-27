@@ -6,7 +6,7 @@ chrome_opt.add_argument('--headless')
 chrome_opt.add_argument('--no-sandbox')
 
 driver = webdriver.Chrome("/usr/lib/chromium-browser/chromedriver", options=chrome_opt)
-driver.get("http://orangechallenge.azurewebsites.net")
+driver.get("http://oczoom.azurewebsites.net")
 
 username_textbox = driver.find_element_by_id("username")
 username_textbox.send_keys("greg")
