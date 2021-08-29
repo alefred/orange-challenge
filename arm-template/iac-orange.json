@@ -13,7 +13,10 @@
         "servicePlanName": "[concat(parameters('webAppName'), '-ServicePlan')]",
         "acrName": "[concat(parameters('webAppName'), 'Acr')]",
         "acrId": "[resourceId('Microsoft.ContainerRegistry/registries', variables('acrName'))]",
-        "acrUrl": "[concat('https://', variables('acrName'), '.azurecr.io')]"
+        "acrUrl": "[concat('https://', variables('acrName'), '.azurecr.io')]",
+        "insightName": "[concat(parameters('webAppName'), 'Insight')]",
+        "insightId": "[resourceId('microsoft.insights/components/', variables('insightName'))]",
+        "errorPage": "[concat('https://', parameters('webAppName'), '.scm.azurewebsites.net/detectors?type=tools&name=eventviewer')]"
     },
     "resources": [
         {
@@ -88,11 +91,45 @@
                         {
                             "name": "DOCKER_REGISTRY_SERVER_PASSWORD",
                             "value": "[listCredentials(variables('acrId'),'2020-11-01-preview').passwords[0].value]"
+                        },
+                         {
+                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                            "value": "[reference(variables('insightId'), '2015-05-01').InstrumentationKey]"
+                        },
+                        {
+                            "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                            "value": "[reference(variables('insightId'), '2015-05-01').ConnectionString]"
+                        },
+                        {
+                            "name": "ApplicationInsightsAgent_EXTENSION_VERSION",
+                            "value": "~2"
+                        },
+                        {
+                            "name": "XDT_MicrosoftApplicationInsights_Mode",
+                            "value": "default"
+                        },
+                        {
+                            "name": "ANCM_ADDITIONAL_ERROR_PAGE_LINK",
+                            "value": "[variables('errorPage')]"
                         }
                     ]
                 }
             }
-        }  
+        },
+        {
+            "apiVersion": "2015-05-01",
+            "name": "[variables('insightName')]",
+            "type": "microsoft.insights/components",
+            "location": "East US 2",
+            "kind": "web",
+            "tags": {
+                "reason": "orange-challenge"
+            },
+            "properties": {
+                "Application_Type": "web",
+                "ApplicationId": "[parameters('webAppName')]"
+            }
+        }
     ],
     "outputs": {}
 }
