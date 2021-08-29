@@ -150,7 +150,7 @@ Copy the output and paste as a new secret "AZURE_CREDENTIALS" in github repo for
  4. Clic in the name of your last commit pushed
 ![picture alt](https://chi01pap002files.storage.live.com/y4mSCH-CpKWJ20RifjiSwuCfmrSMGRZObG7gs33Fn4FxmAknlR_zkpnReaAUbFWfxeSbJrSd-sWEIyzOjc4LwLs3VIRXLEFo8PpofCceWtWGCzrfIR9Z4LmNeYkIPOHqSW44c8Hk0gZlV0WAWiJ5nxRoPeXQwK03FY-TGh25G3i4jaSEHvbU4RZaKdeSDFoR9wc?width=1909&height=755&cropmode=none "Title is optional")
 
-Browse the app: [oczoom.azurewebsites.net](http://oczoom.azurewebsites.net/login)
+Browse the app: [oczoom.azurewebsites.net](http://oczoom.azurewebsites.net/)
 
 ### Clean Up Infrastructure
 
