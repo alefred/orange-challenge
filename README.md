@@ -117,8 +117,8 @@ az login --use-device-code
 ```
 az provider register --namespace 'Microsoft.Web'
 az provider register --namespace 'Microsoft.ContainerRegistry'
-$appSpName="oczoom-spApp"
-$rgName="oczoom_rg"
+$appSpName="orange-spApp"
+$rgName="orange_rg"
 $subscriptionId = az account show --query id --output tsv
 az group create --resource-group $rgName --location "East US 2"
 az ad sp create-for-rbac --name $appSpName --role contributor --scopes "/subscriptions/$subscriptionId/resourceGroups/$rgName" --sdk-auth
@@ -157,8 +157,8 @@ az ad sp create-for-rbac --name $appSpName --role contributor --scopes "/subscri
  n-1. Execute the next list of commands in Azure Cli
 
 ```
-$appSpName="oczoom-spApp"
-$rgName="oczoom_rg"
+$appSpName="orange-spApp"
+$rgName="orange_rg"
 $subscriptionId = az account show --query id --output tsv
 az group delete --resource-group $rgName --yes
 az ad sp delete --id (az ad sp list --display-name $appSpName --query "[].appId" --output tsv)
