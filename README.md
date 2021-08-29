@@ -144,7 +144,10 @@ Copy the output and paste as a new secret "AZURE_CREDENTIALS" in github repo for
 ![picture alt](https://chi01pap002files.storage.live.com/y4mlQu23SCpALUKVmBx1UmaMagS-gWh9Rgq-zxySMOYexJ3XKcoJrF2c6MZ0JS2kDoWJZLoQe1Q3coI_GWBVBp9JrTpQBA3ELlAzqhmJHjbqPi_F4w2RD2iL2ISpm2KGtO0oskDImOb1KeZ3zcDpdvWMKcBW4X7uDBqHUt0x5fEvwpv_LtceI7eEi7YkSxQK0Zs?width=1352&height=739&cropmode=none "Title is optional")
 
 ### CI/CD
-Push a change to the main branch and go to GitHub Action to see the process
+ 1. Push a change to the main branch 
+ 2. On GitHub, navigate to the alefred/orange-challenge repository.
+ 3. Go to Actions Tab
+ 4. Clic in the name of your last commit pushed
 ![picture alt](https://chi01pap002files.storage.live.com/y4mSCH-CpKWJ20RifjiSwuCfmrSMGRZObG7gs33Fn4FxmAknlR_zkpnReaAUbFWfxeSbJrSd-sWEIyzOjc4LwLs3VIRXLEFo8PpofCceWtWGCzrfIR9Z4LmNeYkIPOHqSW44c8Hk0gZlV0WAWiJ5nxRoPeXQwK03FY-TGh25G3i4jaSEHvbU4RZaKdeSDFoR9wc?width=1909&height=755&cropmode=none "Title is optional")
 
 Browse the app: [oczoom.azurewebsites.net](http://oczoom.azurewebsites.net/login)
