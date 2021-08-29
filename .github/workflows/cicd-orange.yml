@@ -113,7 +113,6 @@ jobs:
         packages: |
           selenium
     - name: Login to the web page
-      run: python ./test-files/login.py
-
+      run: python ./test-files/test-login.py ${{ env.AZURE_WEBAPP_NAME }}.azurewebsites.net
 
 

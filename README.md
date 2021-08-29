@@ -15,7 +15,7 @@
 
 ---
 
-<p align="center"> Few lines describing your project.
+<p align="center"> This project are created in order to show main devops position skills: pipelines, iac, scripting and cloud.
     <br> 
 </p>
 
@@ -103,7 +103,7 @@ These instructions will get you a copy of the project up and running on your loc
 and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
 
 ### Fork the project
- 1. On GitHub, navigate to the octocat/Spoon-Knife repository.
+ 1. On GitHub, navigate to the alefred/orange-challenge repository.
  2. In the top-right corner of the page, click Fork.
    ![picture alt](https://docs.github.com/assets/images/help/repository/fork_button.jpg "Title is optional")
 Fork button
