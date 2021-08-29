@@ -1,5 +1,5 @@
 # iniciar el arm template con: arm! az login --use-device-code
-$rg = 'orangeTest_rg'
+$rg = 'frenchOrange_rg'
 az group create --resource-group $rg --location "East US 2"
 
 New-AzResourceGroupDeployment `
