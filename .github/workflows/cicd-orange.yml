@@ -63,7 +63,7 @@ jobs:
 
     #TODO: Get ACR Credentials
     - name: Get ACR Admin
-      run: echo "ACR_PASS=$(az acr credential show --name oczoomAcr --query passwords[0].value --output tsv)" >> $GITHUB_ENV
+      run: echo "ACR_PASS=$(az acr credential show --name $oczoomAcr --query passwords[0].value --output tsv)" >> $GITHUB_ENV
 
     #Build image to ACR
     - uses: azure/docker-login@v1
