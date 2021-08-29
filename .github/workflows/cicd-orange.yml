@@ -9,9 +9,9 @@ on:
       - main
 
 env:
-  AZURE_RESOURCE_GROUP: orange_rg   # set this to your target resource group
-  AZURE_WEBAPP_NAME: orangeapp # ${{ env.AZURE_WEBAPP_NAME }} (2)
-  AZURE_ACR_NAME: orangeAppAcr # Web App Name + to finish in "Acr" (1)
+  AZURE_RESOURCE_GROUP: frenchOrange_rg   # set this to your target resource group
+  AZURE_WEBAPP_NAME: frenchOrange # ${{ env.AZURE_WEBAPP_NAME }} (2)
+  AZURE_ACR_NAME: frenchOrangeAcr # Web App Name + to finish in "Acr" (1)
 
 jobs:
   iac:

@@ -118,8 +118,8 @@ az login --use-device-code
 az provider register --namespace 'Microsoft.Web'
 az provider register --namespace 'Microsoft.ContainerRegistry'
 az provider register --namespace 'Microsoft.insights'
-$appSpName="orange-spApp"
-$rgName="orange_rg"
+$appSpName="frenchOrange-spApp"
+$rgName="frenchOrange_rg"
 $subscriptionId = az account show --query id --output tsv
 az group create --resource-group $rgName --location "East US 2"
 az ad sp create-for-rbac --name $appSpName --role contributor --scopes "/subscriptions/$subscriptionId/resourceGroups/$rgName" --sdk-auth
@@ -151,15 +151,15 @@ az ad sp create-for-rbac --name $appSpName --role contributor --scopes "/subscri
  9. Clic in the name of your last commit pushed
 ![picture alt](https://chi01pap002files.storage.live.com/y4mSCH-CpKWJ20RifjiSwuCfmrSMGRZObG7gs33Fn4FxmAknlR_zkpnReaAUbFWfxeSbJrSd-sWEIyzOjc4LwLs3VIRXLEFo8PpofCceWtWGCzrfIR9Z4LmNeYkIPOHqSW44c8Hk0gZlV0WAWiJ5nxRoPeXQwK03FY-TGh25G3i4jaSEHvbU4RZaKdeSDFoR9wc?width=1909&height=755&cropmode=none "Title is optional")
 
- 10. Browse the app: [orangeApp.azurewebsites.net](http://orangeApp.azurewebsites.net/)
+ 10. Browse the app: [frenchOrange.azurewebsites.net](http://frenchOrange.azurewebsites.net/)
 
 ### Clean Up Infrastructure
 
  n-1. Execute the next list of commands in Azure Cli
 
 ```
-$appSpName="orange-spApp"
-$rgName="orange_rg"
+$appSpName="frenchOrange-spApp"
+$rgName="frenchOrange_rg"
 $subscriptionId = az account show --query id --output tsv
 az group delete --resource-group $rgName --yes
 az ad sp delete --id (az ad sp list --display-name $appSpName --query "[].appId" --output tsv)
@@ -183,5 +183,5 @@ environment
 
 
 
- n. *Url app after deploy: orangeApp.azurewebsites.net*
+ n. *Url app after deploy: frenchOrange.azurewebsites.net*
   
