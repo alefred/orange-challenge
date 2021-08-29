@@ -15,7 +15,7 @@
         "acrId": "[resourceId('Microsoft.ContainerRegistry/registries', variables('acrName'))]",
         "acrUrl": "[concat('https://', variables('acrName'), '.azurecr.io')]",
         "insightName": "[concat(parameters('webAppName'), 'Insight')]",
-        "insightId": "[resourceId('microsoft.insights/components/', variables('insightName'))]",
+        "insightId": "[resourceId('Microsoft.insights/components/', variables('insightName'))]",
         "errorPage": "[concat('https://', parameters('webAppName'), '.scm.azurewebsites.net/detectors?type=tools&name=eventviewer')]"
     },
     "resources": [
@@ -118,9 +118,9 @@
             }
         },
         {
-            "apiVersion": "2015-05-01",
             "name": "[variables('insightName')]",
             "type": "microsoft.insights/components",
+            "apiVersion": "2015-05-01",
             "location": "East US 2",
             "kind": "web",
             "tags": {

@@ -11,9 +11,9 @@ chrome_opt.add_argument('--no-sandbox')
 chrome_opt.add_argument('--disable-dev-shm-usage')
 driver = webdriver.Chrome("/usr/lib/chromium-browser/chromedriver", options=chrome_opt)
 
-print "Driver Made"
+print ("Driver Made")
 driver.get("http://" + str(sys.argv[1]))
-print "URL got" + driver.page_source
+print ("URL got" + driver.page_source)
 #driver.implicitly_wait(5)
 
 #fillin the username
