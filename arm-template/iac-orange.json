@@ -69,7 +69,8 @@
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', variables('servicePlanName'))]",
-                "[resourceId('Microsoft.ContainerRegistry/registries', variables('acrName'))]"
+                "[variables('acrId')]",
+                "[variables('insightId')]"
             ],
             "properties": {                
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('servicePlanName'))]",
