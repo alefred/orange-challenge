@@ -31,15 +31,7 @@ WebDriverWait(driver=driver, timeout=10).until(
     lambda x: x.execute_script("return document.readyState === 'complete'")
 )
 
-#error management
-# errors = driver.find_element_by_xpath("//div[@role='alert']")
-# if any(error_message in e.text for e in errors):
-#     print("[!] Login failed")
-# else:
-#     print("[+] Login successful")
-
-
-# print("Login successful: " + driver.current_url)
+print("Login successful: " + driver.current_url)
 print("Page source" + driver.page_source)
 driver.close()
 
