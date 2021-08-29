@@ -3,8 +3,8 @@
 az provider register --namespace 'Microsoft.Web'
 az provider register --namespace 'Microsoft.ContainerRegistry'
 az provider register --namespace 'Microsoft.insights'
-$appSpName="orange-spApp"
-$rgName="orange_rg"
+$appSpName="frenchOrange-spApp"
+$rgName="frenchOrange_rg"
 $subscriptionId = az account show --query id --output tsv
 
 #create a new service principal
