@@ -14,32 +14,32 @@ env:
   AZURE_ACR_NAME: oczoomAcr # net to finish in "Acr" (1)
 
 jobs:
-  # iac:
-  #   name: iac
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@main
-  #   #Login to Azure
-  #   - name: Log in with Azure
-  #     uses: azure/login@v1
-  #     with:
-  #       creds: ${{ secrets.AZURE_CREDENTIALS }}
+  iac:
+    name: iac
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@main
+    #Login to Azure
+    - name: Log in with Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
     
-  #   # Clean Up Azure
-  #   - name: Clean up Resource Group
-  #     uses: azure/arm-deploy@v1
-  #     with:
-  #       deploymentMode: Complete
-  #       resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
-  #       template: ./arm-template/iac-cleanup.json
+    # Clean Up Azure
+    - name: Clean up Resource Group
+      uses: azure/arm-deploy@v1
+      with:
+        deploymentMode: Complete
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
+        template: ./arm-template/iac-cleanup.json
 
-  #    # Deploy ARM template
-  #   - name: Run ARM deploy
-  #     uses: azure/arm-deploy@v1
-  #     with:
-  #       resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
-  #       template: ./arm-template/iac-orange.json
-  #       parameters: webAppName=${{ env.AZURE_WEBAPP_NAME }} 
+     # Deploy ARM template
+    - name: Run ARM deploy
+      uses: azure/arm-deploy@v1
+      with:
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
+        template: ./arm-template/iac-orange.json
+        parameters: webAppName=${{ env.AZURE_WEBAPP_NAME }} 
 
   build:
     name: build
@@ -61,7 +61,7 @@ jobs:
         name: publishfile
         path: webappOrange.PublishSettings 
 
-    #TODO: Get ACR Credentials
+    #Get ACR Credentials
     - name: Get ACR Admin
       run: echo "ACR_PASS=$(az acr credential show --name $AZURE_ACR_NAME --query passwords[0].value --output tsv)" >> $GITHUB_ENV
 
