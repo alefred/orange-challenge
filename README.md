@@ -117,6 +117,7 @@ az login --use-device-code
 ```
 az provider register --namespace 'Microsoft.Web'
 az provider register --namespace 'Microsoft.ContainerRegistry'
+az provider register --namespace 'Microsoft.insights'
 $appSpName="orange-spApp"
 $rgName="orange_rg"
 $subscriptionId = az account show --query id --output tsv
@@ -150,7 +151,7 @@ az ad sp create-for-rbac --name $appSpName --role contributor --scopes "/subscri
  9. Clic in the name of your last commit pushed
 ![picture alt](https://chi01pap002files.storage.live.com/y4mSCH-CpKWJ20RifjiSwuCfmrSMGRZObG7gs33Fn4FxmAknlR_zkpnReaAUbFWfxeSbJrSd-sWEIyzOjc4LwLs3VIRXLEFo8PpofCceWtWGCzrfIR9Z4LmNeYkIPOHqSW44c8Hk0gZlV0WAWiJ5nxRoPeXQwK03FY-TGh25G3i4jaSEHvbU4RZaKdeSDFoR9wc?width=1909&height=755&cropmode=none "Title is optional")
 
- 10. Browse the app: [oczoom.azurewebsites.net](http://oczoom.azurewebsites.net/)
+ 10. Browse the app: [orangeApp.azurewebsites.net](http://orangeApp.azurewebsites.net/)
 
 ### Clean Up Infrastructure
 
@@ -182,5 +183,5 @@ environment
 
 
 
- n. *Url app after deploy: oczoom.azurewebsites.net*
+ n. *Url app after deploy: orangeApp.azurewebsites.net*
   
