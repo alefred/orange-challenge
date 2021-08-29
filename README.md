@@ -99,8 +99,8 @@ Next version must have:
 
 ## 🏁 How to use <a name = "getting_started"></a>
 
-These instructions will get you a copy of the project up and running on your local machine for development
-and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
+These instructions will get you a copy of the project up and running on your own environment for development
+and testing purposes.
 
 ### Fork the project
  1. On GitHub, navigate to the alefred/orange-challenge repository.
@@ -109,11 +109,11 @@ and testing purposes. See [deployment](#deployment) for notes on how to deploy t
 Fork button
 
 ### Prepare connection with Azure
-Connect to az cli with:
+ 3. Connect to az cli with:
 ```
 az login --use-device-code
 ```
-Execute next command in your az cli in order to copy the output:
+ 4. Execute next command in your az cli in order to copy the output:
 ```
 az provider register --namespace 'Microsoft.Web'
 az provider register --namespace 'Microsoft.ContainerRegistry'
@@ -124,7 +124,7 @@ az group create --resource-group $rgName --location "East US 2"
 az ad sp create-for-rbac --name $appSpName --role contributor --scopes "/subscriptions/$subscriptionId/resourceGroups/$rgName" --sdk-auth
 
 ```
-The output could be similar to:
+ 4. The output could be similar to:
 ```
 {
   "clientId": "-------------------------e8",
@@ -140,21 +140,21 @@ The output could be similar to:
 }
 
 ```
-Copy the output and paste as a new secret "AZURE_CREDENTIALS" in github repo forked as the image show:
+ 5. Copy the output and paste as a new secret "AZURE_CREDENTIALS" in github repo forked as the image show:
 ![picture alt](https://chi01pap002files.storage.live.com/y4mlQu23SCpALUKVmBx1UmaMagS-gWh9Rgq-zxySMOYexJ3XKcoJrF2c6MZ0JS2kDoWJZLoQe1Q3coI_GWBVBp9JrTpQBA3ELlAzqhmJHjbqPi_F4w2RD2iL2ISpm2KGtO0oskDImOb1KeZ3zcDpdvWMKcBW4X7uDBqHUt0x5fEvwpv_LtceI7eEi7YkSxQK0Zs?width=1352&height=739&cropmode=none "Title is optional")
 
 ### CI/CD
- 1. Push a change to the main branch 
- 2. On GitHub, navigate to the alefred/orange-challenge repository.
- 3. Go to Actions Tab
- 4. Clic in the name of your last commit pushed
+ 6. Push a change to the main branch 
+ 7. On GitHub, navigate to the alefred/orange-challenge repository.
+ 8. Go to Actions Tab
+ 9. Clic in the name of your last commit pushed
 ![picture alt](https://chi01pap002files.storage.live.com/y4mSCH-CpKWJ20RifjiSwuCfmrSMGRZObG7gs33Fn4FxmAknlR_zkpnReaAUbFWfxeSbJrSd-sWEIyzOjc4LwLs3VIRXLEFo8PpofCceWtWGCzrfIR9Z4LmNeYkIPOHqSW44c8Hk0gZlV0WAWiJ5nxRoPeXQwK03FY-TGh25G3i4jaSEHvbU4RZaKdeSDFoR9wc?width=1909&height=755&cropmode=none "Title is optional")
 
-Browse the app: [oczoom.azurewebsites.net](http://oczoom.azurewebsites.net/)
+ 10. Browse the app: [oczoom.azurewebsites.net](http://oczoom.azurewebsites.net/)
 
 ### Clean Up Infrastructure
 
-Execute the next list of commands in Azure Cli
+ n-1. Execute the next list of commands in Azure Cli
 
 ```
 $appSpName="oczoom-spApp"
@@ -182,5 +182,5 @@ environment
 
 
 
-*Url app after deploy: oczoom.azurewebsites.net*
+ n. *Url app after deploy: oczoom.azurewebsites.net*
   
