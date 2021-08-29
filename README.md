@@ -105,8 +105,8 @@ and testing purposes.
 ### Fork the project
  1. On GitHub, navigate to the alefred/orange-challenge repository.
  2. In the top-right corner of the page, click Fork.
-   ![picture alt](https://docs.github.com/assets/images/help/repository/fork_button.jpg "Title is optional")
-Fork button
+   ![picture alt](https://docs.github.com/assets/images/help/repository/fork_button.jpg "Fork button")
+
 
 ### Prepare connection with Azure
  3. Connect to az cli with:
