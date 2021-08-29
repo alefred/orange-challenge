@@ -115,6 +115,8 @@ az login --use-device-code
 ```
 Execute next command in your az cli in order to copy the output:
 ```
+az provider register --namespace 'Microsoft.Web'
+az provider register --namespace 'Microsoft.ContainerRegistry'
 $appSpName="oczoom-spApp"
 $rgName="oczoom_rg"
 $subscriptionId = az account show --query id --output tsv
