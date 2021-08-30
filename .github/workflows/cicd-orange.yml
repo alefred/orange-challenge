@@ -9,9 +9,9 @@ on:
       - main
 
 env:
-  AZURE_RESOURCE_GROUP: frenchOrange_rg   # set this to your target resource group
-  AZURE_WEBAPP_NAME: frenchOrange # ${{ env.AZURE_WEBAPP_NAME }} (2)
-  AZURE_ACR_NAME: frenchOrangeAcr # Web App Name + to finish in "Acr" (1)
+  AZURE_RESOURCE_GROUP: testapp001_rg #frenchOrange_rg   # set this to your target resource group
+  AZURE_WEBAPP_NAME: testapp001 #frenchOrange # ${{ env.AZURE_WEBAPP_NAME }} (2)
+  AZURE_ACR_NAME: testapp001Acr #frenchOrangeAcr # Web App Name + to finish in "Acr" (1)
 
 jobs:
   iac:
@@ -63,7 +63,7 @@ jobs:
 
     #TODO: Get ACR Credentials
     - name: Get ACR Admin
-      run: echo "ACR_PASS=$(az acr credential show --name frenchOrangeAcr --query passwords[0].value --output tsv)" >> $GITHUB_ENV
+      run: echo "ACR_PASS=$(az acr credential show --name $AZURE_ACR_NAME --query passwords[0].value --output tsv)" >> $GITHUB_ENV
 
     #Build image to ACR
     - uses: azure/docker-login@v1
