@@ -61,9 +61,9 @@ jobs:
         name: publishfile
         path: webappOrange.PublishSettings 
 
-    #Get ACR Credentials
+    #TODO: Get ACR Credentials
     - name: Get ACR Admin
-      run: echo "ACR_PASS=$(az acr credential show --name $AZURE_ACR_NAME --query passwords[0].value --output tsv)" >> $GITHUB_ENV
+      run: echo "ACR_PASS=$(az acr credential show --name frenchOrangeAcr --query passwords[0].value --output tsv)" >> $GITHUB_ENV
 
     #Build image to ACR
     - uses: azure/docker-login@v1
