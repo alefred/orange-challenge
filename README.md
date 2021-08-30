@@ -145,9 +145,11 @@ az ad sp create-for-rbac --name $appSpName --role contributor --scopes "/subscri
 ![picture alt](https://chi01pap002files.storage.live.com/y4mlQu23SCpALUKVmBx1UmaMagS-gWh9Rgq-zxySMOYexJ3XKcoJrF2c6MZ0JS2kDoWJZLoQe1Q3coI_GWBVBp9JrTpQBA3ELlAzqhmJHjbqPi_F4w2RD2iL2ISpm2KGtO0oskDImOb1KeZ3zcDpdvWMKcBW4X7uDBqHUt0x5fEvwpv_LtceI7eEi7YkSxQK0Zs?width=1352&height=739&cropmode=none "Title is optional")
 
 ### CI/CD
- 7. On GitHub, navigate to the alefred/orange-challenge repository.
- 8. Go to Actions Tab and Accept enable Actions
- 9. Push a change to the main branch 
+ 7. On GitHub, navigate to the orange-challenge own repository.
+ 8. Go to Actions Tab and enable Actions "I understand my workflows, go ahead and enable them"
+![picture alt](https://chi01pap002files.storage.live.com/y4m4F9Mx2t2QltZSPDGrjYCiNBOgeot886R_SUANWTxVRY12nHCESiOx-Mimw3qNMNYwp28wpGDRIaN4MfD04zkksU8rUNuEXNgxoeOeBvNEJpw5LcXNW0JSmshY_M3sntKNXj8R4rFPpWYoWC7LNewKWDgE7jVU3NuR7kIFmvnVIb-pOpQichsazRB0YGU60qG?width=1268&height=675&cropmode=none "Title is optional")
+
+ 9.  Push any change to the main branch 
  10. Return to Actions Tab
  11. Clic in the name of your last commit pushed
 ![picture alt](https://chi01pap002files.storage.live.com/y4mSCH-CpKWJ20RifjiSwuCfmrSMGRZObG7gs33Fn4FxmAknlR_zkpnReaAUbFWfxeSbJrSd-sWEIyzOjc4LwLs3VIRXLEFo8PpofCceWtWGCzrfIR9Z4LmNeYkIPOHqSW44c8Hk0gZlV0WAWiJ5nxRoPeXQwK03FY-TGh25G3i4jaSEHvbU4RZaKdeSDFoR9wc?width=1909&height=755&cropmode=none "Title is optional")
