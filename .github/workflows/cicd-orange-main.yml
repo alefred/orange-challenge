@@ -1,0 +1,118 @@
+name: cicd-orange
+
+on:
+  push:
+    branches: 
+      - main
+  pull_request:
+    branches: 
+      - main
+
+env:
+  AZURE_RESOURCE_GROUP: frenchOrange_rg #frenchOrange_rg   # set this to your target resource group
+  AZURE_WEBAPP_NAME: frenchOrange #frenchOrange # ${{ env.AZURE_WEBAPP_NAME }} (2)
+  AZURE_ACR_NAME: frenchOrangeAcr #frenchOrangeAcr # Web App Name + to finish in "Acr" (1)
+
+jobs:
+  iac:
+    name: iac
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@main
+    #Login to Azure
+    - name: Log in with Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    # Clean Up Azure
+    - name: Clean up Resource Group
+      uses: azure/arm-deploy@v1
+      with:
+        deploymentMode: Complete
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
+        template: ./arm-template/iac-cleanup.json
+
+     # Deploy ARM template
+    - name: Run ARM deploy
+      uses: azure/arm-deploy@v1
+      with:
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
+        template: ./arm-template/iac-orange.json
+        parameters: webAppName=${{ env.AZURE_WEBAPP_NAME }} 
+
+  build:
+    name: build
+    needs: iac
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@main
+    #**Login to Azure
+    - name: Log in with Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - name: publish-profile to file
+      run: az webapp deployment list-publishing-profiles -g ${{ env.AZURE_RESOURCE_GROUP }} -n ${{ env.AZURE_WEBAPP_NAME }}  --xml >> webappOrange.PublishSettings 
+    - name: Save publish-profile
+      uses: actions/upload-artifact@v1
+      with:
+        name: publishfile
+        path: webappOrange.PublishSettings 
+
+    #TODO: Get ACR Credentials
+    - name: Get ACR Admin
+      run: echo "ACR_PASS=$(az acr credential show --name $AZURE_ACR_NAME --query passwords[0].value --output tsv)" >> $GITHUB_ENV
+
+    #Build image to ACR
+    - uses: azure/docker-login@v1
+      with:
+        login-server: ${{ env.AZURE_ACR_NAME }}.azurecr.io
+        username: ${{ env.AZURE_ACR_NAME }}
+        password: ${{ env.ACR_PASS }}
+    - run: |
+        docker build -t ${{ env.AZURE_ACR_NAME }}.azurecr.io/img-orangev0 .
+        docker push ${{ env.AZURE_ACR_NAME }}.azurecr.io/img-orangev0
+  
+  deploy:
+    name: deploy
+    needs: build
+    runs-on: ubuntu-latest
+    #Get Publishing profile
+    steps:
+    - name: Load publishing-file
+      uses: actions/download-artifact@v1
+      with:
+        name: publishfile
+    - name: publishing-file to variable
+      run: echo "PUB_PROF=$(cat publishfile/webappOrange.PublishSettings)" >> $GITHUB_ENV
+    #Deploy WebApp
+    - name: Deploy web app to azure webapp for containers
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        publish-profile: ${{ env.PUB_PROF }}
+        images: '${{ env.AZURE_ACR_NAME }}.azurecr.io/img-orangev0'
+  
+  test:
+    name: Run tests
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install Python
+      uses: actions/setup-python@v1
+    - name: Install package chromium
+      uses: lyricwulf/abc@v1
+      with:
+        linux: chromium-chromedriver
+    - name: Install pip selenium
+      uses: BSFishy/pip-action@v1
+      with:
+        packages: |
+          selenium
+    - name: Login to the web page
+      run: python ./test-files/test-login.py ${{ env.AZURE_WEBAPP_NAME }}.azurewebsites.net
+
+

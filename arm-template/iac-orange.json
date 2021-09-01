@@ -1,0 +1,136 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "webAppName": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 24
+        }
+    },
+    "functions": [],
+    "variables": {
+        "servicePlanName": "[concat(parameters('webAppName'), '-ServicePlan')]",
+        "acrName": "[concat(parameters('webAppName'), 'Acr')]",
+        "acrId": "[resourceId('Microsoft.ContainerRegistry/registries', variables('acrName'))]",
+        "acrUrl": "[concat('https://', variables('acrName'), '.azurecr.io')]",
+        "insightName": "[concat(parameters('webAppName'), 'Insight')]",
+        "insightId": "[resourceId('Microsoft.insights/components/', variables('insightName'))]",
+        "errorPage": "[concat('https://', parameters('webAppName'), '.scm.azurewebsites.net/detectors?type=tools&name=eventviewer')]"
+    },
+    "resources": [
+        {
+            "name": "[variables('acrName')]",
+            "type": "Microsoft.ContainerRegistry/registries",
+            "apiVersion": "2020-11-01-preview",
+            "location": "East US 2",
+            "tags": {
+                "reason": "orange-challenge"
+            },
+            "sku": {
+                "name": "Standard",
+                "tier": "Standard"
+            },
+            "properties": {
+                "adminUserEnabled": true,
+                "dataEndpointEnabled": false,
+                "publicNetworkAccess": "Enabled",
+                "networkRuleBypassOptions": "AzureServices",
+                "zoneRedundancy": "Disabled",
+                "anonymousPullEnabled": false
+            }
+        },
+        {
+            "name": "[variables('servicePlanName')]",
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2020-12-01",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "reason": "orange-challenge"
+            },
+            "sku": {
+                "Tier": "Basic",
+                "Name": "B3"
+            },
+            "kind": "linux",
+            "properties": {
+                "name": "[variables('servicePlanName')]",
+                "numberOfWorkers": 1,
+                "reserved": true
+            }
+        },
+        {
+            "name": "[parameters('webAppName')]",
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2018-11-01",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "reason": "orange-challenge"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', variables('servicePlanName'))]",
+                "[variables('acrId')]",
+                "[variables('insightId')]"
+            ],
+            "properties": {                
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('servicePlanName'))]",
+                "SiteConfig": {
+                    "name": "[parameters('webAppName')]",
+                    "appSettings": [
+                        {
+                            "name": "PORT",
+                            "value": "8080"
+                        },
+                        {
+                            "name": "DOCKER_REGISTRY_SERVER_URL",
+                            "value": "[variables('acrUrl')]"
+                        },
+                        {
+                            "name": "DOCKER_REGISTRY_SERVER_USERNAME",
+                            "value": "[variables('acrName')]"
+                        },
+                        {
+                            "name": "DOCKER_REGISTRY_SERVER_PASSWORD",
+                            "value": "[listCredentials(variables('acrId'),'2020-11-01-preview').passwords[0].value]"
+                        },
+                         {
+                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                            "value": "[reference(variables('insightId'), '2015-05-01').InstrumentationKey]"
+                        },
+                        {
+                            "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                            "value": "[reference(variables('insightId'), '2015-05-01').ConnectionString]"
+                        },
+                        {
+                            "name": "ApplicationInsightsAgent_EXTENSION_VERSION",
+                            "value": "~2"
+                        },
+                        {
+                            "name": "XDT_MicrosoftApplicationInsights_Mode",
+                            "value": "default"
+                        },
+                        {
+                            "name": "ANCM_ADDITIONAL_ERROR_PAGE_LINK",
+                            "value": "[variables('errorPage')]"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "[variables('insightName')]",
+            "type": "microsoft.insights/components",
+            "apiVersion": "2015-05-01",
+            "location": "East US 2",
+            "kind": "web",
+            "tags": {
+                "reason": "orange-challenge"
+            },
+            "properties": {
+                "Application_Type": "web",
+                "ApplicationId": "[parameters('webAppName')]"
+            }
+        }
+    ],
+    "outputs": {}
+}

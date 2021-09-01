@@ -1,0 +1,18 @@
+#execute in powerShell
+#Variables
+az provider register --namespace 'Microsoft.Web'
+az provider register --namespace 'Microsoft.ContainerRegistry'
+az provider register --namespace 'Microsoft.insights'
+$appSpName="alefredapp023-spApp"
+$rgName="alefredapp023_rg"
+$subscriptionId = az account show --query id --output tsv
+
+#create a new service principal
+az group create --resource-group $rgName --location "East US 2"
+az ad sp create-for-rbac --name $appSpName --role contributor --scopes "/subscriptions/$subscriptionId/resourceGroups/$rgName" --sdk-auth
+
+# Delete Section
+az group delete --resource-group $rgName --yes
+az ad sp delete --id (az ad sp list --display-name $appSpName --query "[].appId" --output tsv)
+
+
