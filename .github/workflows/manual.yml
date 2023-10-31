@@ -16,9 +16,7 @@ on:
 jobs:
   setup:
     runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{fromJSON(nameArray)}}
     steps:
       - id: matrix
         run: |
-          echo "${{ matrix.value }}"
+          echo "${{fromJSON(nameArray)}}"
